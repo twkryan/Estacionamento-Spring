@@ -5,6 +5,7 @@ import br.gov.sp.etec.estacionamento.model.Veiculo;
 import br.gov.sp.etec.estacionamento.repository.VeiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,6 +19,22 @@ public class VeiculoServiceImpl implements VeiculoService {
     @Override
     public void cadastrarVeiculo(Veiculo veiculo) {
         repository.save(toVeiculoEntity(veiculo));
+    }
+
+    @Override
+    public List<VeiculoEntity> listarEntradasAbertas(String placa) {
+        return repository.findByHoraSaidaIsNullAndPlacaContainingIgnoreCaseOrderByHoraEntradaAsc(placa.trim());
+    }
+
+    @Override
+    public List<VeiculoEntity> listarHistoricoSaidas(String placa) {
+        return repository.findByHoraSaidaIsNotNullAndPlacaContainingIgnoreCaseOrderByHoraSaidaDesc(placa.trim());
+    }
+
+    @Override
+    @Transactional
+    public boolean registrarSaida(Long id) {
+        return repository.registrarSaida(id, LocalDateTime.now()) == 1;
     }
 
     @Override

@@ -33,6 +33,9 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
     private Usuario toUsuario(UsuarioEntity usuarioEntity){
+        if (usuarioEntity == null) {
+            return null;
+        }
         Usuario usuario = new Usuario();
         usuario.setInputCPFCadastro(usuarioEntity.getInputCPFCadastro());
         usuario.setInputTelefone(usuarioEntity.getInputTelefone());

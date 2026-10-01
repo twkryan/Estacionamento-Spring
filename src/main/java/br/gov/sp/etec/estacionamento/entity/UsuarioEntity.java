@@ -13,11 +13,11 @@ public class UsuarioEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String inputNomeCadastro;
-    private Integer inputCPFCadastro;
+    private String inputCPFCadastro;
     private String inputEmailCadastro;
     private String inputSenhaCadastro;
     private LocalDate inputDataNascimentoCadastro;
-    private Integer inputTelefone;
+    private String inputTelefone;
 
     public Long getId() {
         return id;
@@ -35,11 +35,11 @@ public class UsuarioEntity {
         this.inputNomeCadastro = inputNomeCadastro;
     }
 
-    public Integer getInputCPFCadastro() {
+    public String getInputCPFCadastro() {
         return inputCPFCadastro;
     }
 
-    public void setInputCPFCadastro(Integer inputCPFCadastro) {
+    public void setInputCPFCadastro(String inputCPFCadastro) {
         this.inputCPFCadastro = inputCPFCadastro;
     }
 
@@ -67,11 +67,11 @@ public class UsuarioEntity {
         this.inputDataNascimentoCadastro = inputDataNascimentoCadastro;
     }
 
-    public Integer getInputTelefone() {
+    public String getInputTelefone() {
         return inputTelefone;
     }
 
-    public void setInputTelefone(Integer inputTelefone) {
+    public void setInputTelefone(String inputTelefone) {
         this.inputTelefone = inputTelefone;
     }
 
