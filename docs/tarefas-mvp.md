@@ -1,6 +1,6 @@
 # Divisão proposta do MVP
 
-Rascunho para revisar granularidade, dependências e possíveis fusões ou divisões. Cada tarefa tem seu corpo próprio em docs/tickets-mvp/. Publicação no GitHub ainda pendente.
+Granularidade e dependências aprovadas pelo usuário em 01/10/2026. As sete tarefas estão publicadas como issues #2 a #8, vinculadas à especificação #1 e com dependências nativas no GitHub. Cada tarefa tem seu corpo local em docs/tickets-mvp/; o mapeamento exato está em docs/github-mvp.json.
 
 | Nº | Tarefa | Bloqueada por | Entrega verificável |
 | --- | --- | --- | --- |

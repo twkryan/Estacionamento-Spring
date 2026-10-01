@@ -1,6 +1,6 @@
 # Planejamento do estacionamento
 
-Estado: decisões das duas rodadas aceitas; consolidação do escopo, validação e divisão das tarefas aguardando revisão final. Especificação e tarefas ainda não publicadas.
+Estado: escopo consolidado, validação e divisão em tarefas aprovados pelo usuário. Especificação publicada como issue #1; tarefas #2 a #8 publicadas com sub-issues e dependências nativas. Implementação transferida para novo chat com contexto limpo a pedido do usuário.
 
 ## Fontes
 
@@ -53,7 +53,7 @@ O modelo existente registra uma entrada por linha, embora a entidade se chame Ve
 
 ## Estado da entrevista
 
-A primeira rodada foi concluída. O usuário aceitou as quatro recomendações da segunda rodada em 01/10/2026. O resumo, a validação proposta e a divisão em tarefas serão revisados antes da publicação.
+As duas rodadas foram concluídas em 01/10/2026. O usuário aceitou as quatro recomendações da segunda rodada e confirmou o escopo consolidado, os testes HTTP com H2 isolado, a verificação no navegador integrado e a divisão em sete tarefas.
 
 ## Próxima etapa
 

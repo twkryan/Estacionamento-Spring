@@ -1,6 +1,6 @@
 # MVP do estacionamento local
 
-Rascunho para revisão. Produto definido nas duas rodadas; validação e divisão em tarefas aguardam confirmação. Ainda não publicado no GitHub.
+Escopo, validação e divisão em tarefas aprovados pelo usuário em 01/10/2026. Publicado em https://github.com/twkryan/Estacionamento-Spring/issues/1.
 
 ## Problem Statement
 
