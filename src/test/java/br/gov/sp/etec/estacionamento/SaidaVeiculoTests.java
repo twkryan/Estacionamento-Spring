@@ -18,20 +18,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class SaidaVeiculoTests {
-    @Autowired
-    MockMvc mvc;
+class SaidaVeiculoTests extends HttpTestSupport {
+    @org.junit.jupiter.api.BeforeEach
+    void autenticarAdmin() throws Exception { iniciarAdmin(); }
 
     @Test
     void segundaConfirmacaoNaoAlteraHorarioDaSaida() throws Exception {
         registrarEntrada("REP4D56");
         String id = paginaDeSaida("REP4D56").selectFirst("input[name=id]").val();
-        mvc.perform(post("/veiculo/registrar-saida").param("id", id))
+        mvc.perform(post("/veiculo/registrar-saida").session(admin).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf()).param("id", id))
                 .andExpect(status().is3xxRedirection());
         String saidaOriginal = paginaDeSaida("REP4D56")
                 .select("#historico-saidas time").get(1).attr("datetime");
 
-        mvc.perform(post("/veiculo/registrar-saida").param("id", id))
+        mvc.perform(post("/veiculo/registrar-saida").session(admin).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf()).param("id", id))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attributeExists("erro"));
 
@@ -44,7 +44,7 @@ class SaidaVeiculoTests {
     @Test
     void entradaInexistenteRecebeMensagemSemAlterarOutrasEntradas() throws Exception {
         registrarEntrada("VAL5E67");
-        mvc.perform(post("/veiculo/registrar-saida").param("id", "9223372036854775807"))
+        mvc.perform(post("/veiculo/registrar-saida").session(admin).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf()).param("id", "9223372036854775807"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attributeExists("erro"));
         assertThat(paginaDeSaida("VAL5E67").select("#entradas-abertas tr")).hasSize(1);
@@ -54,7 +54,7 @@ class SaidaVeiculoTests {
     void mesmaPlacaPodeEntrarNovamenteSemPerderHistorico() throws Exception {
         registrarEntrada("NOV6F78");
         String id = paginaDeSaida("NOV6F78").selectFirst("input[name=id]").val();
-        mvc.perform(post("/veiculo/registrar-saida").param("id", id))
+        mvc.perform(post("/veiculo/registrar-saida").session(admin).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf()).param("id", id))
                 .andExpect(status().is3xxRedirection());
         registrarEntrada("NOV6F78");
 
@@ -72,7 +72,7 @@ class SaidaVeiculoTests {
         String horarioEntrada = abertas.selectFirst("#entradas-abertas time").attr("datetime");
         String entradaExibida = abertas.selectFirst("#entradas-abertas time").text();
 
-        mvc.perform(post("/veiculo/registrar-saida").param("id", id))
+        mvc.perform(post("/veiculo/registrar-saida").session(admin).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf()).param("id", id))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/veiculo/registrar-saida"));
 
@@ -87,7 +87,7 @@ class SaidaVeiculoTests {
     }
 
     private org.jsoup.nodes.Document paginaDeSaida(String placa) throws Exception {
-        var response = mvc.perform(get("/veiculo/registrar-saida").param("placa", placa))
+        var response = mvc.perform(get("/veiculo/registrar-saida").session(admin).param("placa", placa))
                 .andExpect(status().isOk()).andReturn();
         return Jsoup.parse(response.getResponse().getContentAsString());
     }
@@ -97,7 +97,7 @@ class SaidaVeiculoTests {
         registrarEntrada("TST1A23");
         registrarEntrada("OUT2B34");
 
-        var response = mvc.perform(get("/veiculo/registrar-saida").param("placa", "tst1a23"))
+        var response = mvc.perform(get("/veiculo/registrar-saida").session(admin).param("placa", "tst1a23"))
                 .andExpect(status().isOk())
                 .andReturn();
         var page = Jsoup.parse(response.getResponse().getContentAsString());
@@ -107,7 +107,7 @@ class SaidaVeiculoTests {
     }
 
     private void registrarEntrada(String placa) throws Exception {
-        mvc.perform(post("/veiculo/cadastrar")
+        mvc.perform(post("/veiculo/cadastrar").session(admin).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf())
                         .param("placa", placa)
                         .param("modelo", "Veículo de teste")
                         .param("cor", "Prata")

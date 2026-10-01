@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Editar usuário')}"></head>
+<body><header th:replace="~{fragments :: nav}"></header>
+<main><section class="cartao"><h1>Editar usuário</h1>
+    <div th:replace="~{fragments :: mensagens}"></div>
+    <form method="post" th:action="@{/usuarios/{id}(id=${id})}" th:object="${dados}">
+        <div th:replace="~{fragments :: dadosUsuario}"></div>
+        <label for="senha">Nova senha (opcional)</label><input id="senha" type="password" name="inputSenhaCadastro" minlength="8" maxlength="72" autocomplete="new-password">
+        <p class="ajuda">Deixe em branco para manter a senha atual.</p>
+        <label for="papel">Papel</label><select id="papel" name="papel"><option value="OPERADOR" th:selected="${papel?.name() == 'OPERADOR'}">Operador</option><option value="ADMIN" th:selected="${papel?.name() == 'ADMIN'}">Admin</option></select>
+        <label class="check" for="ativo"><input id="ativo" type="checkbox" name="ativo" value="true" th:checked="${ativo}">Acesso ativo</label>
+        <div class="acoes"><button type="submit">Salvar usuário</button><a href="/usuarios">Voltar aos usuários</a></div>
+    </form>
+</section></main></body></html>

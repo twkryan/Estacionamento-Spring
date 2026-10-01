@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${'Estacionamento - ' + titulo}"></title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<header class="topo" th:fragment="nav">
+    <a class="marca" href="/painel">Estacionamento</a>
+    <nav aria-label="Navegação principal">
+        <a href="/painel">Painel</a>
+        <a href="/veiculo/registrar-entrada">Registrar Entrada</a>
+        <a href="/veiculo/registrar-saida">Registrar Saída</a>
+        <a th:if="${admin}" href="/usuarios">Usuários</a>
+    </nav>
+    <div class="sessao">
+        <span th:text="${emailAtual}"></span>
+        <form method="post" th:action="@{/logout}"><button class="secundario" type="submit">Sair</button></form>
+    </div>
+</header>
+<div th:fragment="mensagens">
+    <p class="mensagem erro" role="alert" th:if="${erro}" th:text="${erro}"></p>
+    <p class="mensagem" role="status" th:if="${mensagem}" th:text="${mensagem}"></p>
+</div>
+<div class="campos" th:fragment="dadosUsuario">
+    <div><label for="inputNomeCadastro">Nome</label><input id="inputNomeCadastro" th:field="*{inputNomeCadastro}" required maxlength="120" autocomplete="name"></div>
+    <div><label for="inputEmailCadastro">Email</label><input id="inputEmailCadastro" type="email" th:field="*{inputEmailCadastro}" required maxlength="200" autocomplete="email"></div>
+    <div><label for="inputCPFCadastro">CPF (11 dígitos)</label><input id="inputCPFCadastro" th:field="*{inputCPFCadastro}" required inputmode="numeric" pattern="[0-9]{11}" maxlength="11"></div>
+    <div><label for="inputTelefone">Telefone</label><input id="inputTelefone" type="tel" th:field="*{inputTelefone}" required pattern="[0-9]{10,11}" maxlength="11" autocomplete="tel"></div>
+    <div><label for="inputDataNascimentoCadastro">Data de nascimento</label><input id="inputDataNascimentoCadastro" type="date" th:field="*{inputDataNascimentoCadastro}" required></div>
+</div>
+</body></html>

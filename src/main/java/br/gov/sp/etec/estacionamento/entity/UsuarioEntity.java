@@ -14,10 +14,20 @@ public class UsuarioEntity {
     private Long id;
     private String inputNomeCadastro;
     private String inputCPFCadastro;
+    @jakarta.persistence.Column(name = "input_cpf_cadastro")
+    private String cpfLegado;
     private String inputEmailCadastro;
     private String inputSenhaCadastro;
     private LocalDate inputDataNascimentoCadastro;
     private String inputTelefone;
+    @jakarta.persistence.Enumerated(jakarta.persistence.EnumType.STRING)
+    private Papel papel;
+    private Boolean ativo;
+
+    public Papel getPapel() { return papel; }
+    public void setPapel(Papel papel) { this.papel = papel; }
+    public boolean isAtivo() { return Boolean.TRUE.equals(ativo); }
+    public void setAtivo(boolean ativo) { this.ativo = ativo; }
 
     public Long getId() {
         return id;
@@ -36,7 +46,7 @@ public class UsuarioEntity {
     }
 
     public String getInputCPFCadastro() {
-        return inputCPFCadastro;
+        return inputCPFCadastro != null && !inputCPFCadastro.isBlank() ? inputCPFCadastro : cpfLegado;
     }
 
     public void setInputCPFCadastro(String inputCPFCadastro) {

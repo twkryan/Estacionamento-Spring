@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Estacionamento - Registrar Saída</title>
-    <link rel="stylesheet" href="/css/saida.css">
-</head>
-<body>
+<head th:replace="~{fragments :: head('Registrar Saída')}"></head>
+<body><header th:replace="~{fragments :: nav}"></header>
 <main>
     <header>
         <h1>Registrar Saída</h1>
@@ -35,7 +30,7 @@
                     <td th:text="${entrada.cor}"></td>
                     <td><time th:datetime="${entrada.horaEntrada}" th:text="${#temporals.format(entrada.horaEntrada, 'dd/MM/yyyy HH:mm:ss')}"></time></td>
                     <td>
-                        <form method="post" action="/veiculo/registrar-saida">
+                        <form method="post" th:action="@{/veiculo/registrar-saida}">
                             <input type="hidden" name="id" th:value="${entrada.id}">
                             <button type="submit" th:attr="aria-label=${'Confirmar saída de ' + entrada.placa}">Confirmar saída</button>
                         </form>

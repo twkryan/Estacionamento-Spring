@@ -7,6 +7,7 @@ public class Usuario {
     private String inputCPFCadastro;
     private String inputEmailCadastro;
     private String inputSenhaCadastro;
+    @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE)
     private LocalDate inputDataNascimentoCadastro;
     private String inputTelefone;
 
@@ -64,7 +65,6 @@ public class Usuario {
                 "inputNomeCadastro='" + inputNomeCadastro + '\'' +
                 ", inputCPFCadastro=" + inputCPFCadastro +
                 ", inputEmailCadastro='" + inputEmailCadastro + '\'' +
-                ", inputSenhaCadastro='" + inputSenhaCadastro + '\'' +
                 ", inputDataNascimentoCadastro=" + inputDataNascimentoCadastro +
                 ", inputTelefone=" + inputTelefone +
                 '}';
