@@ -31,6 +31,10 @@ button:hover, .btn:hover { background: #7351bb; color: white; }
 .indicador { display: grid; gap: 6px; padding: 20px; border: 1px solid #393342; border-radius: 12px; background: #101016; color: #b9b5c5; }
 .indicador strong { color: #f5f3ff; font-size: 28px; }
 .check { display: flex; align-items: center; gap: 10px; }
+.opcoes-configuracao { margin-top: 36px; padding-top: 12px; border-top: 1px solid #393342; }
+.opcoes-configuracao .check { margin-top: 14px; color: #f5f3ff; }
+.opcoes-configuracao .check input { flex: 0 0 18px; margin: 0; }
+.tabela table { min-width: 650px; }
 .tabela { overflow-x: auto; }
 .tabela-usuarios table { min-width: 650px; }
 table { width: 100%; border-collapse: collapse; text-align: left; }

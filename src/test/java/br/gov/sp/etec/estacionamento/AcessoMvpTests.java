@@ -46,8 +46,28 @@ class AcessoMvpTests extends HttpTestSupport {
                 .param("inputSenha", "SenhaIncorreta")).andExpect(redirectedUrl("/?erro"));
         assertThat(pagina("/?erro", new org.springframework.mock.web.MockHttpSession()).text()).contains("Email ou senha inválidos");
         mvc.perform(post("/logout").session(admin).with(csrf())).andExpect(redirectedUrl("/?logout"));
+        assertThat(pagina("/?logout", new org.springframework.mock.web.MockHttpSession()).select("p.mensagem").text())
+                .contains("Sessão encerrada");
         mvc.perform(get("/painel")).andExpect(status().is3xxRedirection());
         assertThat(admin.isInvalid()).isTrue();
+    }
+
+    @Test
+    void confirmacoesDeAutenticacaoRespeitamOpcaoDeNotificacoesMasErrosPermanecem() throws Exception {
+        iniciarAdmin();
+        var anonimo = new org.springframework.mock.web.MockHttpSession();
+        assertThat(pagina("/?cadastro", anonimo).select("p.mensagem").text())
+                .contains("Admin cadastrado");
+
+        mvc.perform(post("/configuracoes/opcoes").session(admin).with(csrf())
+                        .param("backup", "true").param("exportacao", "true"))
+                .andExpect(status().is3xxRedirection());
+
+        assertThat(pagina("/?logout", anonimo).select("p.mensagem")).isEmpty();
+        assertThat(pagina("/?cadastro", anonimo).select("p.mensagem")).isEmpty();
+        assertThat(pagina("/?erro", anonimo).select(".erro").text())
+                .contains("Email ou senha inválidos");
+        assertThat(pagina("/usuarios?sucesso", admin).select("p.mensagem")).isEmpty();
     }
 
     @Test
@@ -66,6 +86,8 @@ class AcessoMvpTests extends HttpTestSupport {
                 .filter(row -> row.text().contains("operador@example.com")).findFirst().orElseThrow().attr("data-id");
         mvc.perform(editar(operadorId, "operador@example.com", "ADMIN", true).session(admin))
                 .andExpect(redirectedUrl("/usuarios?sucesso"));
+        assertThat(pagina("/usuarios?sucesso", admin).select("p.mensagem").text())
+                .contains("Usuário salvo com sucesso");
         mvc.perform(get("/usuarios").session(operador)).andExpect(status().isOk());
         assertThat(pagina("/usuarios/" + operadorId, admin).selectFirst("#inputNomeCadastro").val()).isEqualTo("Nome editado");
         mvc.perform(editar(operadorId, "operador@example.com", "OPERADOR", true).session(admin))
