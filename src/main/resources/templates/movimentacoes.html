@@ -45,7 +45,11 @@
         <p id="estado-vazio" class="ajuda" th:if="${#lists.isEmpty(resultado.movimentacoes)}">
             Nenhuma movimentação encontrada.
         </p>
-        <div class="tabela" th:unless="${#lists.isEmpty(resultado.movimentacoes)}">
+        <p id="orientacao-rolagem" class="ajuda" th:unless="${#lists.isEmpty(resultado.movimentacoes)}">
+            Em telas estreitas, deslize a tabela horizontalmente para ver as demais colunas.
+        </p>
+        <div class="tabela" role="region" aria-label="Tabela de movimentações" tabindex="0"
+             th:unless="${#lists.isEmpty(resultado.movimentacoes)}">
             <table id="tabela-movimentacoes">
                 <thead>
                 <tr><th>Placa</th><th>Modelo</th><th>Entrada</th><th>Saída</th><th>Permanência</th></tr>

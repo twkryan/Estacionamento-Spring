@@ -57,6 +57,9 @@ class MovimentacaoHttpTests extends HttpTestSupport {
         var pagina = pagina("/movimentacoes?placa=AB123", admin);
 
         assertThat(pagina.select("#tabela-movimentacoes tbody tr")).hasSize(2);
+        assertThat(pagina.select(".tabela[role=region][aria-label='Tabela de movimentações'][tabindex=0]")).hasSize(1);
+        assertThat(pagina.selectFirst("#orientacao-rolagem").text())
+                .contains("Em telas estreitas, deslize a tabela");
         assertThat(pagina.select("#tabela-movimentacoes tbody tr").text())
                 .contains("ab-12 3cd", "Sedan", "Placa com espaço Unicode");
         assertThat(pagina.selectFirst("#total-movimentacoes").text()).isEqualTo("2");
