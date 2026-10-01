@@ -3,6 +3,7 @@ package br.gov.sp.etec.estacionamento.service;
 import br.gov.sp.etec.estacionamento.entity.VeiculoEntity;
 import br.gov.sp.etec.estacionamento.model.FiltroMovimentacoes;
 import br.gov.sp.etec.estacionamento.model.MovimentacaoDTO;
+import br.gov.sp.etec.estacionamento.model.Placa;
 import br.gov.sp.etec.estacionamento.model.ResultadoMovimentacoes;
 import br.gov.sp.etec.estacionamento.repository.MovimentacaoRepository;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class MovimentacaoService {
@@ -26,10 +28,14 @@ public class MovimentacaoService {
         LocalDateTime fimExclusivo = filtro.dataFim() == null
                 ? null
                 : filtro.dataFim().plusDays(1).atStartOfDay();
-        String placa = PlacaMovimentacoes.normalizar(filtro.placa());
+        String placa = Placa.normalizar(filtro.placa());
         LocalDateTime agora = LocalDateTime.now(clock);
 
-        List<MovimentacaoDTO> resultado = movimentacoes.pesquisar(placa, inicio, fimExclusivo).stream()
+        Stream<VeiculoEntity> entradas = movimentacoes.pesquisar(inicio, fimExclusivo).stream();
+        if (!placa.isEmpty()) {
+            entradas = entradas.filter(veiculo -> Placa.normalizar(veiculo.getPlaca()).contains(placa));
+        }
+        List<MovimentacaoDTO> resultado = entradas
                 .map(veiculo -> converter(veiculo, agora))
                 .toList();
         List<Long> permanenciasEncerradas = resultado.stream()

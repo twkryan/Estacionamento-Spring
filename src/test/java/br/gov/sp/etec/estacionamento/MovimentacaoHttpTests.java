@@ -36,6 +36,7 @@ class MovimentacaoHttpTests extends HttpTestSupport {
         var pagina = pagina("/movimentacoes", admin);
 
         assertThat(pagina.selectFirst("h1").text()).isEqualTo("Movimentações");
+        assertThat(pagina.select("nav a[href='/movimentacoes']")).hasSize(1);
         assertThat(pagina.selectFirst("#total-movimentacoes").text()).isEqualTo("0");
         assertThat(pagina.text()).contains("Nenhuma movimentação encontrada");
         assertThat(pagina.select("#media-permanencia")).isEmpty();
@@ -50,13 +51,15 @@ class MovimentacaoHttpTests extends HttpTestSupport {
     void buscaPorPlacaIgnoraCaixaEspacosEHifenMasPreservaPlacaExibida() throws Exception {
         iniciarAdmin();
         salvar(" ab-12 3cd ", "Sedan", LocalDateTime.of(2025, 7, 1, 10, 15), null);
+        salvar("AB\u00a0-12 3CD", "Placa com espaço Unicode", LocalDateTime.of(2025, 7, 1, 10, 20), null);
         salvar("ZZZ-9999", "Hatch", LocalDateTime.of(2025, 7, 1, 11, 0), null);
 
-        var pagina = pagina("/movimentacoes?placa=123-C", admin);
+        var pagina = pagina("/movimentacoes?placa=AB123", admin);
 
-        assertThat(pagina.select("#tabela-movimentacoes tbody tr")).hasSize(1);
-        assertThat(pagina.selectFirst("#tabela-movimentacoes tbody tr").text()).contains("ab-12 3cd", "Sedan");
-        assertThat(pagina.selectFirst("#total-movimentacoes").text()).isEqualTo("1");
+        assertThat(pagina.select("#tabela-movimentacoes tbody tr")).hasSize(2);
+        assertThat(pagina.select("#tabela-movimentacoes tbody tr").text())
+                .contains("ab-12 3cd", "Sedan", "Placa com espaço Unicode");
+        assertThat(pagina.selectFirst("#total-movimentacoes").text()).isEqualTo("2");
     }
 
     @Test
@@ -110,6 +113,7 @@ class MovimentacaoHttpTests extends HttpTestSupport {
         var pagina = pagina("/movimentacoes", operador);
 
         assertThat(pagina.selectFirst("h1").text()).isEqualTo("Movimentações");
+        assertThat(pagina.select("nav a[href='/movimentacoes']")).hasSize(1);
     }
 
     @Test
