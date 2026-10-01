@@ -11,4 +11,19 @@
         <input id="capacidade" name="capacidade" type="number" min="1" step="1" required th:value="${valorCapacidade}">
         <div class="acoes"><button type="submit">Salvar capacidade</button></div>
     </form>
+    <form method="post" th:action="@{/configuracoes/opcoes}" class="opcoes-configuracao">
+        <h2>Opções do sistema</h2>
+        <label class="check"><input id="notificacoes" name="notificacoes" type="checkbox" value="true" th:checked="${configuracao.notificacoes}"> Notificações visuais de confirmação</label>
+        <label class="check"><input id="backup" name="backup" type="checkbox" value="true" th:checked="${configuracao.backup}"> Habilitar backup manual</label>
+        <label class="check"><input id="exportacao" name="exportacao" type="checkbox" value="true" th:checked="${configuracao.exportacao}"> Habilitar exportação de dados</label>
+        <div class="acoes"><button type="submit">Salvar opções</button></div>
+    </form>
+    <section class="opcoes-configuracao" aria-labelledby="titulo-backup">
+        <h2 id="titulo-backup">Backup local</h2>
+        <p class="ajuda">O arquivo SQL inclui os dados e as configurações atuais.</p>
+        <div class="acoes">
+            <a class="btn" th:if="${configuracao.backup}" href="/configuracoes/backup">Baixar backup SQL</a>
+            <span class="ajuda" th:unless="${configuracao.backup}">Backup manual desabilitado.</span>
+        </div>
+    </section>
 </section></main></body></html>

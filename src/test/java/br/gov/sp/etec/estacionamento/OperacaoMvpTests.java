@@ -176,6 +176,53 @@ class OperacaoMvpTests extends HttpTestSupport {
     }
 
     @Test
+    void opcoesPersistemEControlamApenasAsConfirmacoesDeSucesso() throws Exception {
+        var inicial = pagina("/configuracoes", admin);
+        assertThat(inicial.selectFirst("#notificacoes").hasAttr("checked")).isTrue();
+        assertThat(inicial.selectFirst("#backup").hasAttr("checked")).isTrue();
+        assertThat(inicial.selectFirst("#exportacao").hasAttr("checked")).isTrue();
+
+        var sucessoHabilitado = mvc.perform(post("/veiculo/cadastrar").session(admin).with(csrf())
+                        .param("placa", "NOT1A23").param("modelo", "Com notificação").param("cor", "Azul"))
+                .andExpect(status().isOk()).andReturn();
+        assertThat(org.jsoup.Jsoup.parse(sucessoHabilitado.getResponse().getContentAsString())
+                .selectFirst(".mensagem").text()).contains("Entrada registrada");
+
+        mvc.perform(post("/configuracoes/opcoes").session(admin).with(csrf())
+                        .param("backup", "true"))
+                .andExpect(status().is3xxRedirection());
+
+        var opcoesSalvas = pagina("/configuracoes", admin);
+        assertThat(opcoesSalvas.selectFirst("#notificacoes").hasAttr("checked")).isFalse();
+        assertThat(opcoesSalvas.selectFirst("#backup").hasAttr("checked")).isTrue();
+        assertThat(opcoesSalvas.selectFirst("#exportacao").hasAttr("checked")).isFalse();
+        assertThat(opcoesSalvas.select(".mensagem")).isEmpty();
+
+        var sucessoDesabilitado = mvc.perform(post("/veiculo/cadastrar").session(admin).with(csrf())
+                        .param("placa", "NOT2B34").param("modelo", "Sem confirmação").param("cor", "Prata"))
+                .andExpect(status().isOk()).andReturn();
+        assertThat(org.jsoup.Jsoup.parse(sucessoDesabilitado.getResponse().getContentAsString())
+                .select(".mensagem")).isEmpty();
+
+        var erro = mvc.perform(post("/veiculo/cadastrar").session(admin).with(csrf())
+                        .param("placa", "NOT2B34").param("modelo", "Duplicada").param("cor", "Prata"))
+                .andExpect(status().isOk()).andReturn();
+        var formulario = org.jsoup.Jsoup.parse(erro.getResponse().getContentAsString());
+        assertThat(formulario.selectFirst(".erro").text()).contains("já possui uma entrada aberta");
+
+        var saidaBusca = mvc.perform(get("/veiculo/registrar-saida").session(admin).param("placa", "NOT2B34"))
+                .andExpect(status().isOk()).andReturn();
+        String id = org.jsoup.Jsoup.parse(saidaBusca.getResponse().getContentAsString())
+                .selectFirst("#entradas-abertas input[name=id]").val();
+        mvc.perform(post("/veiculo/registrar-saida").session(admin).with(csrf()).param("id", id))
+                .andExpect(status().is3xxRedirection());
+        var saidaSemConfirmacao = mvc.perform(get("/veiculo/registrar-saida").session(admin))
+                .andExpect(status().isOk()).andReturn();
+        assertThat(org.jsoup.Jsoup.parse(saidaSemConfirmacao.getResponse().getContentAsString())
+                .select(".mensagem")).isEmpty();
+    }
+
+    @Test
     void capacidadeInvalidaOuAbaixoDaOcupacaoNaoSubstituiValorSalvo() throws Exception {
         var invalida = mvc.perform(post("/configuracoes").session(admin).with(csrf())
                         .param("capacidade", "abc"))

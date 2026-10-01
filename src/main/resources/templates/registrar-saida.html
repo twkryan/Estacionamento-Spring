@@ -7,8 +7,7 @@
         <h1>Registrar Saída</h1>
         <a href="/painel">Voltar ao painel</a>
     </header>
-    <p class="mensagem" role="status" th:if="${mensagem}" th:text="${mensagem}"></p>
-    <p class="mensagem erro" role="alert" th:if="${erro}" th:text="${erro}"></p>
+    <div th:replace="~{fragments :: mensagens}"></div>
     <form method="get" action="/veiculo/registrar-saida" class="busca">
         <label for="placa">Buscar pela placa</label>
         <div class="campos-busca">
