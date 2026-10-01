@@ -4,8 +4,8 @@
 <body><main class="acesso"><section class="cartao">
     <h1>Login</h1><p class="ajuda">Entre para operar o estacionamento.</p>
     <p th:if="${param.erro}" class="mensagem erro" role="alert">Email ou senha inválidos, ou acesso inativo.</p>
-    <p th:if="${param.logout}" class="mensagem" role="status">Sessão encerrada.</p>
-    <p th:if="${param.cadastro}" class="mensagem" role="status">Admin cadastrado. Entre com sua conta.</p>
+    <p th:if="${notificacoes == true and param.logout != null}" class="mensagem" role="status">Sessão encerrada.</p>
+    <p th:if="${notificacoes == true and param.cadastro != null}" class="mensagem" role="status">Admin cadastrado. Entre com sua conta.</p>
     <p th:if="${migracao}" class="mensagem erro" role="alert">Esta base contém usuários legados. O responsável deve concluir a migração administrativa antes de liberar essas contas.</p>
     <form method="post" th:action="@{/autenticar}">
         <label for="inputEmail">Email</label><input type="email" id="inputEmail" name="inputEmail" required autocomplete="username">

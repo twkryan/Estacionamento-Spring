@@ -25,7 +25,7 @@
 </header>
 <div th:fragment="mensagens">
     <p class="mensagem erro" role="alert" th:if="${erro}" th:text="${erro}"></p>
-    <p class="mensagem" role="status" th:if="${mensagem}" th:text="${mensagem}"></p>
+    <p class="mensagem" role="status" th:if="${notificacoes == true and mensagem != null}" th:text="${mensagem}"></p>
 </div>
 <div class="campos" th:fragment="dadosUsuario">
     <div><label for="inputNomeCadastro">Nome</label><input id="inputNomeCadastro" th:field="*{inputNomeCadastro}" required maxlength="120" autocomplete="name"></div>
