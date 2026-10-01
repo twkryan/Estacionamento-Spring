@@ -2,6 +2,31 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head('Painel')}"></head>
 <body><header th:replace="~{fragments :: nav}"></header>
-<main><section class="cartao"><h1>Painel Estacionamento</h1>
-    <p class="ajuda">Use o menu para registrar entradas e saídas.</p>
-</section></main></body></html>
+<main>
+    <section class="cartao" aria-labelledby="titulo-painel">
+        <h1 id="titulo-painel">Painel Estacionamento</h1>
+        <div th:replace="~{fragments :: mensagens}"></div>
+        <div class="indicadores-vagas" aria-label="Indicadores de vagas">
+            <article class="indicador"><span>Capacidade</span><strong id="capacidade-atual" th:text="${indicadores.capacidade}"></strong><span>vagas</span></article>
+            <article class="indicador"><span>Ocupação atual</span><strong id="ocupacao-atual" th:text="${indicadores.ocupacao}"></strong><span>veículos</span></article>
+            <article class="indicador"><span>Vagas disponíveis</span><strong id="vagas-disponiveis" th:text="${indicadores.vagasDisponiveis}"></strong><span>vagas</span></article>
+        </div>
+        <section aria-labelledby="titulo-entradas-painel">
+            <h2 id="titulo-entradas-painel">Entradas abertas</h2>
+            <p id="estado-vazio" th:if="${#lists.isEmpty(entradas)}">Nenhuma entrada aberta no momento.</p>
+            <div class="tabela">
+                <table id="painel-entradas">
+                    <thead><tr><th>Placa</th><th>Modelo</th><th>Entrada</th><th>Status</th></tr></thead>
+                    <tbody id="painel-entradas-corpo">
+                    <tr th:each="entrada : ${entradas}">
+                        <td th:text="${entrada.placa}"></td>
+                        <td th:text="${entrada.modelo}"></td>
+                        <td><time th:datetime="${entrada.horaEntrada}" th:text="${#temporals.format(entrada.horaEntrada, 'dd/MM/yyyy HH:mm:ss')}"></time></td>
+                        <td>Entrada aberta</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </section>
+</main></body></html>

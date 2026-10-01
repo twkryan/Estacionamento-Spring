@@ -3,11 +3,13 @@
 <head th:replace="~{fragments :: head('Registrar Entrada')}"></head>
 <body><header th:replace="~{fragments :: nav}"></header>
 <main><section class="cartao"><h1>Registrar Entrada</h1>
-    <form method="post" th:action="@{/veiculo/cadastrar}">
-        <label for="placa">Placa</label><input type="text" id="placa" name="placa" placeholder="Ex: ABC1D23" required>
-        <label for="modelo">Modelo</label><input type="text" id="modelo" name="modelo" placeholder="Ex: Honda Civic" required>
-        <label for="cor">Cor</label><input type="text" id="cor" name="cor" placeholder="Ex: Preto" required>
-        <label for="observacao">Observação</label><textarea id="observacao" name="observacao" placeholder="Digite alguma observação..."></textarea>
+    <div th:replace="~{fragments :: mensagens}"></div>
+    <p class="ajuda" th:text="${'Vagas disponíveis: ' + indicadores.vagasDisponiveis}"></p>
+    <form method="post" th:action="@{/veiculo/cadastrar}" th:object="${veiculo}">
+        <label for="placa">Placa</label><input type="text" id="placa" th:field="*{placa}" placeholder="Ex: ABC1D23" maxlength="20" required>
+        <label for="modelo">Modelo</label><input type="text" id="modelo" th:field="*{modelo}" placeholder="Ex: Honda Civic" maxlength="120" required>
+        <label for="cor">Cor</label><input type="text" id="cor" th:field="*{cor}" placeholder="Ex: Preto" maxlength="80" required>
+        <label for="observacao">Observação</label><textarea id="observacao" th:field="*{observacao}" placeholder="Digite alguma observação..." maxlength="255"></textarea>
         <div class="acoes"><button type="submit">Registrar Entrada</button><a href="/painel">Voltar</a></div>
     </form>
 </section></main></body></html>

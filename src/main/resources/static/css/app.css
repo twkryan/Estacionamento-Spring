@@ -27,6 +27,9 @@ button:hover, .btn:hover { background: #7351bb; color: white; }
 .secundario { background: #101016; color: #c6bfd3; border-color: #393342; }
 .acoes { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
 .campos { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 20px; }
+.indicadores-vagas { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; margin: 24px 0 32px; }
+.indicador { display: grid; gap: 6px; padding: 20px; border: 1px solid #393342; border-radius: 12px; background: #101016; color: #b9b5c5; }
+.indicador strong { color: #f5f3ff; font-size: 28px; }
 .check { display: flex; align-items: center; gap: 10px; }
 .tabela { overflow-x: auto; }
 .tabela-usuarios table { min-width: 650px; }
@@ -38,4 +41,4 @@ time { white-space: nowrap; }
 .mensagem { padding: 14px 18px; border: 1px solid #617a63; background: #183324; color: #c8f2d5; border-radius: 9px; }
 .erro { background: #3e1d29; border-color: #a35d73; color: #ffd8e4; }
 :focus-visible { outline: 3px solid #b18cff; outline-offset: 3px; }
-@media (max-width: 640px) { .topo { padding: 20px 16px; gap: 16px; } .sessao { margin-left: 0; width: 100%; justify-content: space-between; } main { padding: 0 16px; margin-top: 24px; } .cartao { padding: 24px 18px; } .campos { grid-template-columns: 1fr; } h1 { font-size: 25px; } .acesso { margin: 24px auto; } }
+@media (max-width: 640px) { .topo { padding: 20px 16px; gap: 16px; } .sessao { margin-left: 0; width: 100%; justify-content: space-between; } main { padding: 0 16px; margin-top: 24px; } .cartao { padding: 24px 18px; } .campos, .indicadores-vagas { grid-template-columns: 1fr; } h1 { font-size: 25px; } .acesso { margin: 24px auto; } }
