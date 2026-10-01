@@ -11,8 +11,9 @@ import java.time.LocalDateTime;
 
 @Repository
 public interface VeiculoRepository extends JpaRepository<VeiculoEntity, Long> {
-    List<VeiculoEntity> findByHoraSaidaIsNullAndPlacaContainingIgnoreCaseOrderByHoraEntradaAsc(String placa);
-    List<VeiculoEntity> findByHoraSaidaIsNotNullAndPlacaContainingIgnoreCaseOrderByHoraSaidaDesc(String placa);
+    long countByHoraSaidaIsNull();
+    List<VeiculoEntity> findByHoraSaidaIsNullOrderByHoraEntradaAsc();
+    List<VeiculoEntity> findByHoraSaidaIsNotNullOrderByHoraSaidaDesc();
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("update tb_veiculo v set v.horaSaida = :horaSaida where v.id = :id and v.horaSaida is null")
