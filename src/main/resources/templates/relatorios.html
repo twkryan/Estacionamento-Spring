@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Relatórios')}"></head>
+<body><header th:replace="~{fragments :: nav}"></header>
+<main>
+    <section class="cartao">
+        <h1>Relatórios</h1>
+        <p class="ajuda">Consulte as movimentações e os indicadores atuais do estacionamento.</p>
+
+        <div th:replace="~{fragments :: mensagens}"></div>
+
+        <form method="get" th:action="@{/relatorios}">
+            <div class="campos">
+                <div>
+                    <label for="placa">Placa</label>
+                    <input id="placa" name="placa" type="search" maxlength="20" th:value="${placaFiltro}">
+                </div>
+                <div>
+                    <label for="dataInicio">Entrada a partir de</label>
+                    <input id="dataInicio" name="dataInicio" type="date" th:value="${dataInicioFiltro}">
+                </div>
+                <div>
+                    <label for="dataFim">Entrada até</label>
+                    <input id="dataFim" name="dataFim" type="date" th:value="${dataFimFiltro}">
+                </div>
+            </div>
+            <div class="acoes">
+                <button type="submit">Buscar</button>
+                <a class="btn secundario" th:href="@{/relatorios}">Limpar filtros</a>
+                <a id="exportar-csv" class="btn" th:if="${exportacaoHabilitada}"
+                   th:href="@{/relatorios/exportar(placa=${placaFiltro},dataInicio=${dataInicioFiltro},dataFim=${dataFimFiltro})}">Exportar CSV</a>
+                <span id="exportacao-desabilitada" class="ajuda" th:unless="${exportacaoHabilitada}">
+                    A exportação está desabilitada nas configurações.
+                </span>
+            </div>
+        </form>
+
+        <section aria-label="Resumo do relatório">
+            <h2>Resumo</h2>
+            <p>Total de movimentações: <strong id="total-movimentacoes" th:text="${relatorio.movimentacoes.total}">0</strong></p>
+            <p th:if="${relatorio.movimentacoes.mediaPermanenciaMinutos != null}">
+                Média de permanência:
+                <strong id="media-permanencia" th:text="${relatorio.movimentacoes.mediaPermanenciaFormatada}"></strong>
+            </p>
+            <p id="sem-media" class="ajuda" th:if="${relatorio.movimentacoes.mediaPermanenciaMinutos == null}">
+                Não há visitas encerradas para calcular a média.
+            </p>
+        </section>
+
+        <section aria-label="Ocupação atual">
+            <h2>Ocupação atual</h2>
+            <meter id="barra-ocupacao" min="0" max="100" aria-label="Percentual de ocupação"
+                   th:value="${relatorio.indicadores.percentualOcupacao}"></meter>
+            <p>Capacidade: <strong id="capacidade-atual" th:text="${relatorio.indicadores.capacidade}"></strong></p>
+            <p>Veículos no estacionamento: <strong id="ocupacao-atual" th:text="${relatorio.indicadores.ocupacao}"></strong></p>
+            <p>Vagas disponíveis: <strong id="vagas-disponiveis" th:text="${relatorio.indicadores.vagasDisponiveis}"></strong></p>
+            <p>Ocupação: <strong id="percentual-ocupacao" th:text="${relatorio.percentualOcupacaoFormatado}"></strong></p>
+        </section>
+
+        <p id="estado-vazio" class="ajuda" th:if="${#lists.isEmpty(relatorio.movimentacoes.movimentacoes)}">
+            Nenhuma movimentação encontrada.
+        </p>
+        <p id="orientacao-rolagem" class="ajuda" th:unless="${#lists.isEmpty(relatorio.movimentacoes.movimentacoes)}">
+            Em telas estreitas, deslize a tabela horizontalmente para ver as demais colunas.
+        </p>
+        <div class="tabela" role="region" aria-label="Movimentações do relatório" tabindex="0"
+             th:unless="${#lists.isEmpty(relatorio.movimentacoes.movimentacoes)}">
+            <table id="tabela-movimentacoes">
+                <thead>
+                <tr><th>Placa</th><th>Modelo</th><th>Entrada</th><th>Saída</th><th>Permanência</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="movimentacao : ${relatorio.movimentacoes.movimentacoes}">
+                    <td th:text="${movimentacao.placa}"></td>
+                    <td th:text="${movimentacao.modelo}"></td>
+                    <td><time th:text="${movimentacao.horaEntrada == null ? '—' : #temporals.format(movimentacao.horaEntrada, 'dd/MM/yyyy HH:mm')}"></time></td>
+                    <td th:text="${movimentacao.aberta ? 'Visita aberta' : #temporals.format(movimentacao.horaSaida, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td th:text="${movimentacao.permanenciaFormatada}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main></body></html>
