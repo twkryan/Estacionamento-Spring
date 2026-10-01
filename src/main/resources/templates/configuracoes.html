@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Configurações')}"></head>
+<body><header th:replace="~{fragments :: nav}"></header>
+<main><section class="cartao" aria-labelledby="titulo-configuracoes">
+    <h1 id="titulo-configuracoes">Configurações</h1>
+    <div th:replace="~{fragments :: mensagens}"></div>
+    <p class="ajuda">A capacidade não pode ficar abaixo da ocupação atual (<span th:text="${indicadores.ocupacao}"></span> entradas abertas).</p>
+    <form method="post" th:action="@{/configuracoes}">
+        <label for="capacidade">Capacidade do estacionamento</label>
+        <input id="capacidade" name="capacidade" type="number" min="1" step="1" required th:value="${valorCapacidade}">
+        <div class="acoes"><button type="submit">Salvar capacidade</button></div>
+    </form>
+</section></main></body></html>
