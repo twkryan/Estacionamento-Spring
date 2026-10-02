@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Usuários')}"></head>
+<body><header th:replace="~{fragments :: nav}"></header>
+<main><section class="cartao">
+    <h1>Usuários</h1><p class="ajuda">Gerencie os acessos e os papéis da equipe.</p>
+    <p th:if="${notificacoes == true and param.sucesso != null}" class="mensagem" role="status">Usuário salvo com sucesso.</p>
+    <a class="btn" href="/cadastro">Cadastrar usuário</a>
+    <div class="tabela tabela-usuarios" tabindex="0" role="region" aria-label="Tabela de usuários"><table><thead><tr><th>Nome</th><th>Email</th><th>Papel</th><th>Acesso</th><th>Ação</th></tr></thead>
+    <tbody id="usuarios"><tr th:each="usuario : ${usuarios}" th:attr="data-id=${usuario.id}">
+        <td th:text="${usuario.inputNomeCadastro}"></td><td th:text="${usuario.inputEmailCadastro}"></td>
+        <td th:text="${usuario.papel ?: 'Migração pendente'}"></td><td th:text="${usuario.ativo ? 'Ativo' : 'Inativo'}"></td>
+        <td><a th:href="@{/usuarios/{id}(id=${usuario.id})}" th:attr="aria-label=${'Editar usuário ' + usuario.inputNomeCadastro}">Editar</a></td>
+    </tr></tbody></table></div>
+</section></main></body></html>

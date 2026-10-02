@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Movimentações')}"></head>
+<body><header th:replace="~{fragments :: nav}"></header>
+<main>
+    <section class="cartao">
+        <h1>Movimentações</h1>
+        <p class="ajuda">Consulte visitas abertas e encerradas pelo período de entrada e pela placa.</p>
+
+        <div th:replace="~{fragments :: mensagens}"></div>
+
+        <form method="get" th:action="@{/movimentacoes}">
+            <div class="campos">
+                <div>
+                    <label for="placa">Placa</label>
+                    <input id="placa" name="placa" type="search" maxlength="20" th:value="${placaFiltro}">
+                </div>
+                <div>
+                    <label for="dataInicio">Entrada a partir de</label>
+                    <input id="dataInicio" name="dataInicio" type="date" th:value="${dataInicioFiltro}">
+                </div>
+                <div>
+                    <label for="dataFim">Entrada até</label>
+                    <input id="dataFim" name="dataFim" type="date" th:value="${dataFimFiltro}">
+                </div>
+            </div>
+            <div class="acoes">
+                <button type="submit">Buscar</button>
+                <a class="btn secundario" th:href="@{/movimentacoes}">Limpar filtros</a>
+            </div>
+        </form>
+
+        <section aria-label="Resumo das movimentações">
+            <h2>Resumo</h2>
+            <p>Total de movimentações: <strong id="total-movimentacoes" th:text="${resultado.total}">0</strong></p>
+            <p th:if="${resultado.mediaPermanenciaMinutos != null}">
+                Média de permanência:
+                <strong id="media-permanencia" th:text="${resultado.mediaPermanenciaFormatada}"></strong>
+            </p>
+            <p id="sem-media" class="ajuda" th:if="${resultado.mediaPermanenciaMinutos == null}">
+                Não há visitas encerradas para calcular a média.
+            </p>
+        </section>
+
+        <p id="estado-vazio" class="ajuda" th:if="${#lists.isEmpty(resultado.movimentacoes)}">
+            Nenhuma movimentação encontrada.
+        </p>
+        <p id="orientacao-rolagem" class="ajuda" th:unless="${#lists.isEmpty(resultado.movimentacoes)}">
+            Em telas estreitas, deslize a tabela horizontalmente para ver as demais colunas.
+        </p>
+        <div class="tabela" role="region" aria-label="Tabela de movimentações" tabindex="0"
+             th:unless="${#lists.isEmpty(resultado.movimentacoes)}">
+            <table id="tabela-movimentacoes">
+                <thead>
+                <tr><th>Placa</th><th>Modelo</th><th>Entrada</th><th>Saída</th><th>Permanência</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="movimentacao : ${resultado.movimentacoes}">
+                    <td th:text="${movimentacao.placa}"></td>
+                    <td th:text="${movimentacao.modelo}"></td>
+                    <td><time th:text="${movimentacao.horaEntrada == null ? '—' : #temporals.format(movimentacao.horaEntrada, 'dd/MM/yyyy HH:mm')}"></time></td>
+                    <td th:text="${movimentacao.aberta ? 'Visita aberta' : #temporals.format(movimentacao.horaSaida, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td th:text="${movimentacao.permanenciaFormatada}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main></body></html>

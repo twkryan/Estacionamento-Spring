@@ -1,0 +1,80 @@
+{
+  "repository": "twkryan/Estacionamento-Spring",
+  "spec": {
+    "url": "https://github.com/twkryan/Estacionamento-Spring/issues/1",
+    "number": 1,
+    "id": 5668323253
+  },
+  "tickets": [
+    {
+      "blockedBy": [],
+      "url": "https://github.com/twkryan/Estacionamento-Spring/issues/2",
+      "order": 1,
+      "number": 2,
+      "title": "Integrar as correções existentes",
+      "id": 5668323682
+    },
+    {
+      "blockedBy": [
+        1
+      ],
+      "url": "https://github.com/twkryan/Estacionamento-Spring/issues/3",
+      "order": 2,
+      "number": 3,
+      "title": "Login, papéis e gestão de usuários",
+      "id": 5668324088
+    },
+    {
+      "blockedBy": [
+        2
+      ],
+      "url": "https://github.com/twkryan/Estacionamento-Spring/issues/4",
+      "order": 3,
+      "number": 4,
+      "title": "Painel e controle de vagas",
+      "id": 5668324601
+    },
+    {
+      "blockedBy": [
+        2
+      ],
+      "url": "https://github.com/twkryan/Estacionamento-Spring/issues/5",
+      "order": 4,
+      "number": 5,
+      "title": "Movimentações e permanência",
+      "id": 5668324994
+    },
+    {
+      "blockedBy": [
+        3,
+        4
+      ],
+      "url": "https://github.com/twkryan/Estacionamento-Spring/issues/6",
+      "order": 5,
+      "number": 6,
+      "title": "Relatórios e exportação CSV",
+      "id": 5668325413
+    },
+    {
+      "blockedBy": [
+        3
+      ],
+      "url": "https://github.com/twkryan/Estacionamento-Spring/issues/7",
+      "order": 6,
+      "number": 7,
+      "title": "Notificações e backup local",
+      "id": 5668325762
+    },
+    {
+      "blockedBy": [
+        5,
+        6
+      ],
+      "url": "https://github.com/twkryan/Estacionamento-Spring/issues/8",
+      "order": 7,
+      "number": 8,
+      "title": "Validar a demonstração completa",
+      "id": 5668326311
+    }
+  ]
+}

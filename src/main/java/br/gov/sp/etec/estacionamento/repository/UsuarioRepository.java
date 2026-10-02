@@ -6,5 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
-    UsuarioEntity findByInputEmailCadastro(String inputEmailCadastro);
+    UsuarioEntity findByInputEmailCadastroIgnoreCase(String inputEmailCadastro);
+    long countByInputEmailCadastroIgnoreCase(String inputEmailCadastro);
+    long countByPapelAndAtivo(br.gov.sp.etec.estacionamento.entity.Papel papel, Boolean ativo);
+    boolean existsByPapelIsNull();
 }

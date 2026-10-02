@@ -4,11 +4,12 @@ import java.time.LocalDate;
 
 public class Usuario {
     private String inputNomeCadastro;
-    private Integer inputCPFCadastro;
+    private String inputCPFCadastro;
     private String inputEmailCadastro;
     private String inputSenhaCadastro;
+    @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE)
     private LocalDate inputDataNascimentoCadastro;
-    private Integer inputTelefone;
+    private String inputTelefone;
 
     public String getInputNomeCadastro() {
         return inputNomeCadastro;
@@ -18,11 +19,11 @@ public class Usuario {
         this.inputNomeCadastro = inputNomeCadastro;
     }
 
-    public Integer getInputCPFCadastro() {
+    public String getInputCPFCadastro() {
         return inputCPFCadastro;
     }
 
-    public void setInputCPFCadastro(Integer inputCPFCadastro) {
+    public void setInputCPFCadastro(String inputCPFCadastro) {
         this.inputCPFCadastro = inputCPFCadastro;
     }
 
@@ -50,11 +51,11 @@ public class Usuario {
         this.inputDataNascimentoCadastro = inputDataNascimentoCadastro;
     }
 
-    public Integer getInputTelefone() {
+    public String getInputTelefone() {
         return inputTelefone;
     }
 
-    public void setInputTelefone(Integer inputTelefone) {
+    public void setInputTelefone(String inputTelefone) {
         this.inputTelefone = inputTelefone;
     }
 
@@ -64,7 +65,6 @@ public class Usuario {
                 "inputNomeCadastro='" + inputNomeCadastro + '\'' +
                 ", inputCPFCadastro=" + inputCPFCadastro +
                 ", inputEmailCadastro='" + inputEmailCadastro + '\'' +
-                ", inputSenhaCadastro='" + inputSenhaCadastro + '\'' +
                 ", inputDataNascimentoCadastro=" + inputDataNascimentoCadastro +
                 ", inputTelefone=" + inputTelefone +
                 '}';

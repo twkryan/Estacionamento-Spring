@@ -17,6 +17,15 @@ public class VeiculoEntity {
     private String cor;
     private String observacao;
     private LocalDateTime horaEntrada;
+    private LocalDateTime horaSaida;
+
+    public LocalDateTime getHoraSaida() {
+        return horaSaida;
+    }
+
+    public void setHoraSaida(LocalDateTime horaSaida) {
+        this.horaSaida = horaSaida;
+    }
 
     public LocalDateTime getHoraEntrada() {
         return horaEntrada;

@@ -1,296 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Estacionamento - Painel</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #050507;
-            padding: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background:
-                linear-gradient(rgba(150, 100, 255, 0.035) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(150, 100, 255, 0.035) 1px, transparent 1px);
-            background-size: 55px 55px;
-            pointer-events: none;
-        }
-
-        body::after {
-            content: '';
-            position: fixed;
-            width: 700px;
-            height: 700px;
-            top: -300px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: radial-gradient(
-                circle,
-                rgba(125, 80, 255, 0.18) 0%,
-                rgba(100, 60, 220, 0.07) 35%,
-                transparent 70%
-            );
-            pointer-events: none;
-        }
-
-        .area {
-            width: 100%;
-            max-width: 700px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .botoes {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            border-radius: 9px;
-            background: linear-gradient(
-                135deg,
-                #6546a9,
-                #8a61d1
-            );
-            border: 1px solid rgba(177, 140, 255, 0.3);
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            background: linear-gradient(
-                135deg,
-                #7351bb,
-                #956be0
-            );
-            box-shadow:
-                0 10px 30px rgba(120, 75, 220, 0.25),
-                0 0 20px rgba(140, 90, 240, 0.12);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .container {
-            background: rgba(12, 12, 17, 0.95);
-            backdrop-filter: blur(15px);
-            padding: 55px 60px;
-            border-radius: 18px;
-            width: 100%;
-            position: relative;
-            text-align: center;
-            border: 1px solid rgba(155, 110, 255, 0.22);
-            box-shadow:
-                0 25px 70px rgba(0, 0, 0, 0.65),
-                0 0 50px rgba(120, 70, 255, 0.08);
-            animation: slideUp 0.6s ease-out;
-            transition: 0.3s ease;
-        }
-
-        .container:hover {
-            border-color: rgba(155, 110, 255, 0.4);
-            box-shadow:
-                0 30px 80px rgba(0, 0, 0, 0.75),
-                0 0 60px rgba(120, 70, 255, 0.13);
-        }
-
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 2px;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                #9a6cff,
-                transparent
-            );
-            box-shadow: 0 0 20px rgba(154, 108, 255, 0.8);
-        }
-
-        .icon {
-            width: 75px;
-            height: 75px;
-            margin: 0 auto 25px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 18px;
-            background: rgba(130, 85, 230, 0.08);
-            border: 1px solid rgba(155, 110, 255, 0.22);
-            font-size: 38px;
-            box-shadow:
-                0 0 30px rgba(120, 70, 255, 0.08);
-            animation: float 3s ease-in-out infinite;
-        }
-
-        h1 {
-            color: #f5f3ff;
-            font-size: 32px;
-            font-weight: 600;
-            margin-bottom: 18px;
-            letter-spacing: 0.5px;
-        }
-
-        h1::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 3px;
-            margin: 12px auto 0;
-            border-radius: 5px;
-            background: linear-gradient(
-                90deg,
-                #7650d9,
-                #b18cff
-            );
-            box-shadow: 0 0 15px rgba(150, 100, 255, 0.5);
-        }
-
-        h2 {
-            color: #85818f;
-            font-size: 17px;
-            font-weight: 400;
-            margin-top: 25px;
-            line-height: 1.6;
-            animation: pulse 2.5s ease-in-out infinite;
-        }
-
-        .status {
-            display: inline-flex;
-            align-items: center;
-            gap: 9px;
-            margin-top: 28px;
-            padding: 9px 16px;
-            border-radius: 20px;
-            background: rgba(110, 220, 150, 0.05);
-            border: 1px solid rgba(110, 220, 150, 0.15);
-            color: #8fcca8;
-            font-size: 13px;
-        }
-
-        .status::before {
-            content: '';
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: #70d69a;
-            box-shadow: 0 0 10px rgba(112, 214, 154, 0.7);
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px) scale(0.97);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.6;
-            }
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-5px);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 38px 22px;
-            }
-
-            .icon {
-                width: 60px;
-                height: 60px;
-                font-size: 30px;
-            }
-
-            h1 {
-                font-size: 25px;
-            }
-
-            h2 {
-                font-size: 15px;
-            }
-
-            .botoes {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-                text-align: center;
-            }
-        }
-    </style>
-</head>
-<body>
-
-<div class="area">
-
-    <div class="container">
-
-        <h1>Painel Estacionamento</h1>
-
-        <div class="botoes">
-            <a href="veiculo/registrar-entrada" class="btn">Registrar Entrada</a>
-            <a href="veiculo/registrar-saida" class="btn">Registrar Saída</a>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Painel')}"></head>
+<body><header th:replace="~{fragments :: nav}"></header>
+<main>
+    <section class="cartao" aria-labelledby="titulo-painel">
+        <h1 id="titulo-painel">Painel Estacionamento</h1>
+        <div th:replace="~{fragments :: mensagens}"></div>
+        <div class="indicadores-vagas" aria-label="Indicadores de vagas">
+            <article class="indicador"><span>Capacidade</span><strong id="capacidade-atual" th:text="${indicadores.capacidade}"></strong><span>vagas</span></article>
+            <article class="indicador"><span>Ocupação atual</span><strong id="ocupacao-atual" th:text="${indicadores.ocupacao}"></strong><span>veículos</span></article>
+            <article class="indicador"><span>Vagas disponíveis</span><strong id="vagas-disponiveis" th:text="${indicadores.vagasDisponiveis}"></strong><span>vagas</span></article>
         </div>
-
-        <h2>Implementações virão!!!!</h2>
-
-        <div class="status">Sistema em desenvolvimento</div>
-    </div>
-
-</div>
-
-</body>
-</html>
+        <section aria-labelledby="titulo-entradas-painel">
+            <h2 id="titulo-entradas-painel">Entradas abertas</h2>
+            <p id="estado-vazio" th:if="${#lists.isEmpty(entradas)}">Nenhuma entrada aberta no momento.</p>
+            <div class="tabela">
+                <table id="painel-entradas">
+                    <thead><tr><th>Placa</th><th>Modelo</th><th>Entrada</th><th>Status</th></tr></thead>
+                    <tbody id="painel-entradas-corpo">
+                    <tr th:each="entrada : ${entradas}">
+                        <td th:text="${entrada.placa}"></td>
+                        <td th:text="${entrada.modelo}"></td>
+                        <td><time th:datetime="${entrada.horaEntrada}" th:text="${#temporals.format(entrada.horaEntrada, 'dd/MM/yyyy HH:mm:ss')}"></time></td>
+                        <td>Entrada aberta</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </section>
+</main></body></html>

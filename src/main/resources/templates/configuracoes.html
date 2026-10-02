@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Configurações')}"></head>
+<body><header th:replace="~{fragments :: nav}"></header>
+<main><section class="cartao" aria-labelledby="titulo-configuracoes">
+    <h1 id="titulo-configuracoes">Configurações</h1>
+    <div th:replace="~{fragments :: mensagens}"></div>
+    <p class="ajuda">A capacidade não pode ficar abaixo da ocupação atual (<span th:text="${indicadores.ocupacao}"></span> entradas abertas).</p>
+    <form method="post" th:action="@{/configuracoes}">
+        <label for="capacidade">Capacidade do estacionamento</label>
+        <input id="capacidade" name="capacidade" type="number" min="1" step="1" required th:value="${valorCapacidade}">
+        <div class="acoes"><button type="submit">Salvar capacidade</button></div>
+    </form>
+    <form method="post" th:action="@{/configuracoes/opcoes}" class="opcoes-configuracao">
+        <h2>Opções do sistema</h2>
+        <label class="check"><input id="notificacoes" name="notificacoes" type="checkbox" value="true" th:checked="${configuracao.notificacoes}"> Notificações visuais de confirmação</label>
+        <label class="check"><input id="backup" name="backup" type="checkbox" value="true" th:checked="${configuracao.backup}"> Habilitar backup manual</label>
+        <label class="check"><input id="exportacao" name="exportacao" type="checkbox" value="true" th:checked="${configuracao.exportacao}"> Habilitar exportação de dados</label>
+        <div class="acoes"><button type="submit">Salvar opções</button></div>
+    </form>
+    <section class="opcoes-configuracao" aria-labelledby="titulo-backup">
+        <h2 id="titulo-backup">Backup local</h2>
+        <p class="ajuda">O arquivo SQL inclui os dados e as configurações atuais.</p>
+        <div class="acoes">
+            <a class="btn" th:if="${configuracao.backup}" href="/configuracoes/backup">Baixar backup SQL</a>
+            <span class="ajuda" th:unless="${configuracao.backup}">Backup manual desabilitado.</span>
+        </div>
+    </section>
+</section></main></body></html>

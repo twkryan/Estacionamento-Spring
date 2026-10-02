@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Registrar Saída')}"></head>
+<body><header th:replace="~{fragments :: nav}"></header>
+<main>
+    <header>
+        <h1>Registrar Saída</h1>
+        <a href="/painel">Voltar ao painel</a>
+    </header>
+    <div th:replace="~{fragments :: mensagens}"></div>
+    <form method="get" action="/veiculo/registrar-saida" class="busca">
+        <label for="placa">Buscar pela placa</label>
+        <div class="campos-busca">
+            <input id="placa" name="placa" type="search" placeholder="Ex: ABC1D23" th:value="${placa}">
+            <button type="submit">Buscar</button>
+            <a href="/veiculo/registrar-saida">Limpar busca</a>
+        </div>
+    </form>
+    <section aria-labelledby="titulo-entradas">
+        <h2 id="titulo-entradas">Entradas abertas</h2>
+        <p th:if="${#lists.isEmpty(entradas)}">Nenhuma entrada aberta encontrada.</p>
+        <div class="tabela" th:unless="${#lists.isEmpty(entradas)}">
+            <table>
+                <thead><tr><th>Placa</th><th>Modelo</th><th>Cor</th><th>Entrada</th><th>Ação</th></tr></thead>
+                <tbody id="entradas-abertas">
+                <tr th:each="entrada : ${entradas}">
+                    <td th:text="${entrada.placa}"></td>
+                    <td th:text="${entrada.modelo}"></td>
+                    <td th:text="${entrada.cor}"></td>
+                    <td><time th:datetime="${entrada.horaEntrada}" th:text="${#temporals.format(entrada.horaEntrada, 'dd/MM/yyyy HH:mm:ss')}"></time></td>
+                    <td>
+                        <form method="post" th:action="@{/veiculo/registrar-saida}">
+                            <input type="hidden" name="id" th:value="${entrada.id}">
+                            <button type="submit" th:attr="aria-label=${'Confirmar saída de ' + entrada.placa}">Confirmar saída</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <section aria-labelledby="titulo-historico">
+        <h2 id="titulo-historico">Histórico de saídas</h2>
+        <p th:if="${#lists.isEmpty(historico)}">Nenhuma saída registrada.</p>
+        <div class="tabela" th:unless="${#lists.isEmpty(historico)}">
+            <table>
+                <thead><tr><th>Placa</th><th>Modelo</th><th>Entrada</th><th>Saída</th></tr></thead>
+                <tbody id="historico-saidas">
+                <tr th:each="entrada : ${historico}">
+                    <td th:text="${entrada.placa}"></td>
+                    <td th:text="${entrada.modelo}"></td>
+                    <td><time th:datetime="${entrada.horaEntrada}" th:text="${#temporals.format(entrada.horaEntrada, 'dd/MM/yyyy HH:mm:ss')}"></time></td>
+                    <td><time th:datetime="${entrada.horaSaida}" th:text="${#temporals.format(entrada.horaSaida, 'dd/MM/yyyy HH:mm:ss')}"></time></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+</body>
+</html>

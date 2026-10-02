@@ -13,11 +13,21 @@ public class UsuarioEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String inputNomeCadastro;
-    private Integer inputCPFCadastro;
+    private String inputCPFCadastro;
+    @jakarta.persistence.Column(name = "input_cpf_cadastro")
+    private String cpfLegado;
     private String inputEmailCadastro;
     private String inputSenhaCadastro;
     private LocalDate inputDataNascimentoCadastro;
-    private Integer inputTelefone;
+    private String inputTelefone;
+    @jakarta.persistence.Enumerated(jakarta.persistence.EnumType.STRING)
+    private Papel papel;
+    private Boolean ativo;
+
+    public Papel getPapel() { return papel; }
+    public void setPapel(Papel papel) { this.papel = papel; }
+    public boolean isAtivo() { return Boolean.TRUE.equals(ativo); }
+    public void setAtivo(boolean ativo) { this.ativo = ativo; }
 
     public Long getId() {
         return id;
@@ -35,11 +45,11 @@ public class UsuarioEntity {
         this.inputNomeCadastro = inputNomeCadastro;
     }
 
-    public Integer getInputCPFCadastro() {
-        return inputCPFCadastro;
+    public String getInputCPFCadastro() {
+        return inputCPFCadastro != null && !inputCPFCadastro.isBlank() ? inputCPFCadastro : cpfLegado;
     }
 
-    public void setInputCPFCadastro(Integer inputCPFCadastro) {
+    public void setInputCPFCadastro(String inputCPFCadastro) {
         this.inputCPFCadastro = inputCPFCadastro;
     }
 
@@ -67,11 +77,11 @@ public class UsuarioEntity {
         this.inputDataNascimentoCadastro = inputDataNascimentoCadastro;
     }
 
-    public Integer getInputTelefone() {
+    public String getInputTelefone() {
         return inputTelefone;
     }
 
-    public void setInputTelefone(Integer inputTelefone) {
+    public void setInputTelefone(String inputTelefone) {
         this.inputTelefone = inputTelefone;
     }
 

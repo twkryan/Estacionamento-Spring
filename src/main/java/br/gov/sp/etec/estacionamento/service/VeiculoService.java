@@ -11,6 +11,9 @@ public interface VeiculoService {
     // atualizar
     // listar
     void cadastrarVeiculo(Veiculo veiculo);
+    List<VeiculoEntity> listarEntradasAbertas(String placa);
+    List<VeiculoEntity> listarHistoricoSaidas(String placa);
+    boolean registrarSaida(Long id);
     List<VeiculoEntity> listarVeiculos();
     boolean excluirVeiculo(Long id);
     VeiculoEntity atualizarVeiculo(VeiculoEntity veiculoEntity);
