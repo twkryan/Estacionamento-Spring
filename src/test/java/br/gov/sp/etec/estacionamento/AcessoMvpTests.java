@@ -128,6 +128,30 @@ class AcessoMvpTests extends HttpTestSupport {
     }
 
     @Test
+    void sessaoOperadorNaoAssumeContaAdminQueReutilizaSeuEmailAntigo() throws Exception {
+        iniciarAdmin();
+        mvc.perform(cadastro("operador@example.com", "OPERADOR").session(admin))
+                .andExpect(status().is3xxRedirection());
+        var operador = login("operador@example.com", "SenhaDeTeste");
+        String operadorId = pagina("/usuarios", admin).select("#usuarios tr").stream()
+                .filter(row -> row.text().contains("operador@example.com")).findFirst().orElseThrow().attr("data-id");
+
+        mvc.perform(editar(operadorId, "operador-novo@example.com", "OPERADOR", true).session(admin))
+                .andExpect(redirectedUrl("/usuarios?sucesso"));
+        mvc.perform(cadastro("operador@example.com", "ADMIN").session(admin))
+                .andExpect(status().is3xxRedirection());
+
+        mvc.perform(get("/usuarios").session(operador)).andExpect(status().isForbidden());
+        assertThat(pagina("/painel", operador).selectFirst("header .sessao span").text())
+                .isEqualTo("operador-novo@example.com");
+
+        var novoAdmin = login("operador@example.com", "SenhaDeTeste");
+        mvc.perform(get("/usuarios").session(novoAdmin)).andExpect(status().isOk());
+        assertThat(pagina("/painel", novoAdmin).selectFirst("header .sessao span").text())
+                .isEqualTo("operador@example.com");
+    }
+
+    @Test
     void validacaoDoCadastroPreservaCamposENaoExpoeSenha() throws Exception {
         var response = mvc.perform(cadastro("teste@example.com", "ADMIN", "12", "2000-01-01"))
                 .andExpect(status().isOk()).andReturn();
