@@ -58,11 +58,10 @@ O backup é manual e baixa uma exportação SQL compatível com H2, com dados e 
 ## Testes e compilação
 
 ```powershell
-.\mvnw.cmd test
-.\mvnw.cmd package
+.\mvnw.cmd verify
 ```
 
-`package` já executa a suíte de testes. Os testes usam H2 isolado do banco local. O pacote gerado pode ser executado sem Maven:
+`verify` executa a suíte de testes e gera o pacote. Os testes usam H2 isolado do banco local. O pacote gerado pode ser executado sem Maven:
 
 ```powershell
 java -jar .\target\estacionamento-0.0.1-SNAPSHOT.jar
@@ -84,3 +83,5 @@ O banco está configurado em `./database/appdb`. Os dados ficam no computador e 
 Repositório: <https://github.com/twkryan/Estacionamento-Spring>.
 
 Escopo aprovado: [especificação do MVP](docs/especificacao-mvp.md). Coordenação e contratos: [orquestração](docs/ORQUESTRACAO-MVP.md). As entregas permanecem em PRs separados até a revisão da integração.
+
+Resultado da demonstração: [validação do MVP](docs/validacao-mvp.md), com 57 testes aprovados, conferência em computador e celular, downloads e persistência após reinício.
