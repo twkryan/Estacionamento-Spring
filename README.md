@@ -2,6 +2,18 @@
 
 Aplicação local de estacionamento com Spring Boot, Thymeleaf, Spring Data JPA e banco H2. O MVP aprovado inclui acesso por Admin e Operador, entradas e saídas, controle de vagas, movimentações, relatórios, configurações e downloads locais. O andamento da implementação e da validação fica nas [issues do MVP](https://github.com/twkryan/Estacionamento-Spring/issues/1).
 
+## Prévia — direção A
+
+![Landing](docs/prototipos/A-landing-desktop.jpg)
+
+![Painel](docs/prototipos/A-painel-desktop.jpg)
+
+![Login](docs/prototipos/A-login-desktop.jpg)
+
+![Entrada](docs/prototipos/A-entrada-desktop.jpg)
+
+![Configurações](docs/prototipos/A-configuracoes-desktop.jpg)
+
 ## Requisitos
 
 - JDK 25, conforme definido no `pom.xml`.
