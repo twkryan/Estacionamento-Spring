@@ -38,6 +38,28 @@ class AcessoMvpTests extends HttpTestSupport {
     }
 
     @Test
+    void linksDaNavegacaoPrincipalRespondemParaAdminEOperador() throws Exception {
+        iniciarAdmin();
+        assertLinksDaNavegacaoRespondem200(admin);
+
+        mvc.perform(cadastro("operador@example.com", "OPERADOR").session(admin))
+                .andExpect(status().is3xxRedirection());
+        var operador = login("operador@example.com", "SenhaDeTeste");
+        assertLinksDaNavegacaoRespondem200(operador);
+    }
+
+    private void assertLinksDaNavegacaoRespondem200(org.springframework.mock.web.MockHttpSession sessao)
+            throws Exception {
+        var links = pagina("/painel", sessao).select("nav[aria-label='Navegação principal'] a[href]");
+        assertThat(links).isNotEmpty();
+        assertThat(links.stream().map(link -> link.attr("href")).toList())
+                .contains("/movimentacoes", "/relatorios");
+        for (var link : links) {
+            mvc.perform(get(link.attr("href")).session(sessao)).andExpect(status().isOk());
+        }
+    }
+
+    @Test
     void loginInvalidoNaoGeraErroInternoELogoutEncerraSessao() throws Exception {
         iniciarAdmin();
         mvc.perform(post("/autenticar").with(csrf()).param("inputEmail", "inexistente@example.com")
@@ -105,6 +127,30 @@ class AcessoMvpTests extends HttpTestSupport {
         assertThat(falha.getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8))
                 .contains("Mantenha pelo menos um Admin ativo");
         assertThat(pagina("/usuarios", admin).text()).contains("ADMIN");
+    }
+
+    @Test
+    void sessaoOperadorNaoAssumeContaAdminQueReutilizaSeuEmailAntigo() throws Exception {
+        iniciarAdmin();
+        mvc.perform(cadastro("operador@example.com", "OPERADOR").session(admin))
+                .andExpect(status().is3xxRedirection());
+        var operador = login("operador@example.com", "SenhaDeTeste");
+        String operadorId = pagina("/usuarios", admin).select("#usuarios tr").stream()
+                .filter(row -> row.text().contains("operador@example.com")).findFirst().orElseThrow().attr("data-id");
+
+        mvc.perform(editar(operadorId, "operador-novo@example.com", "OPERADOR", true).session(admin))
+                .andExpect(redirectedUrl("/usuarios?sucesso"));
+        mvc.perform(cadastro("operador@example.com", "ADMIN").session(admin))
+                .andExpect(status().is3xxRedirection());
+
+        mvc.perform(get("/usuarios").session(operador)).andExpect(status().isForbidden());
+        assertThat(pagina("/painel", operador).selectFirst("header .sessao span").text())
+                .isEqualTo("operador-novo@example.com");
+
+        var novoAdmin = login("operador@example.com", "SenhaDeTeste");
+        mvc.perform(get("/usuarios").session(novoAdmin)).andExpect(status().isOk());
+        assertThat(pagina("/painel", novoAdmin).selectFirst("header .sessao span").text())
+                .isEqualTo("operador@example.com");
     }
 
     @Test
