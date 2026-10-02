@@ -4,7 +4,6 @@ import br.gov.sp.etec.estacionamento.repository.UsuarioRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,8 +26,8 @@ public class SecurityConfig {
                     || !usuario.getInputSenhaCadastro().matches("\\$2[aby]\\$12\\$.{53}")) {
                 throw new UsernameNotFoundException("Credenciais inválidas");
             }
-            return User.withUsername(usuario.getInputEmailCadastro())
-                    .password(usuario.getInputSenhaCadastro()).roles(usuario.getPapel().name()).build();
+            return new UsuarioPrincipal(usuario.getId(), usuario.getInputEmailCadastro(),
+                    usuario.getInputSenhaCadastro(), usuario.getPapel());
         };
     }
 
