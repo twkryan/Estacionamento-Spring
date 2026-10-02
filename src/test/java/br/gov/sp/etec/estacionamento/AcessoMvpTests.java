@@ -38,6 +38,26 @@ class AcessoMvpTests extends HttpTestSupport {
     }
 
     @Test
+    void linksDaNavegacaoPrincipalRespondemParaAdminEOperador() throws Exception {
+        iniciarAdmin();
+        assertLinksDaNavegacaoRespondem200(admin);
+
+        mvc.perform(cadastro("operador@example.com", "OPERADOR").session(admin))
+                .andExpect(status().is3xxRedirection());
+        var operador = login("operador@example.com", "SenhaDeTeste");
+        assertLinksDaNavegacaoRespondem200(operador);
+    }
+
+    private void assertLinksDaNavegacaoRespondem200(org.springframework.mock.web.MockHttpSession sessao)
+            throws Exception {
+        var links = pagina("/painel", sessao).select("nav[aria-label='Navegação principal'] a[href]");
+        assertThat(links).isNotEmpty();
+        for (var link : links) {
+            mvc.perform(get(link.attr("href")).session(sessao)).andExpect(status().isOk());
+        }
+    }
+
+    @Test
     void loginInvalidoNaoGeraErroInternoELogoutEncerraSessao() throws Exception {
         iniciarAdmin();
         mvc.perform(post("/autenticar").with(csrf()).param("inputEmail", "inexistente@example.com")
