@@ -84,4 +84,4 @@ Repositório: <https://github.com/twkryan/Estacionamento-Spring>.
 
 Escopo aprovado: [especificação do MVP](docs/especificacao-mvp.md). Coordenação e contratos: [orquestração](docs/ORQUESTRACAO-MVP.md). As entregas permanecem em PRs separados até a revisão da integração.
 
-Resultado da demonstração: [validação do MVP](docs/validacao-mvp.md), com 57 testes aprovados, conferência em computador e celular, downloads e persistência após reinício.
+Resultado da demonstração: [validação do MVP](docs/validacao-mvp.md), com 59 testes aprovados no `verify` pós-review de 02/10/2026 e conferência do menu de consultas para Admin e Operador em computador e celular. O registro preserva os 57 testes da validação original em seu snapshot histórico.

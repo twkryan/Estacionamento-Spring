@@ -1,8 +1,10 @@
 # Validação da demonstração local
 
+> **Limite histórico:** O registro original abaixo descreve a validação do snapshot `0043ccc15ac0c7452ca89996621c1485b176a6a8` e sua execução de 57 testes em 01/10/2026. Esses resultados permanecem como evidência daquele snapshot. A validação pós-review dos commits seguintes está em seção própria ao final deste documento.
+
 ## Resultado
 
-Conferência concluída em 02/10/2026 para a issue #8, na branch `codex/mvp-integracao`. Código integrado e verificado: `0043ccc15ac0c7452ca89996621c1485b176a6a8`. As alterações posteriores a esse commit são documentação. A demonstração usa dados sintéticos e banco próprio; o checkout principal e os bancos existentes foram preservados.
+Conferência original concluída em 02/10/2026 para a issue #8, na branch `codex/mvp-integracao`. Código integrado e verificado: `0043ccc15ac0c7452ca89996621c1485b176a6a8`. Naquele registro, alterações posteriores a esse commit eram documentação. A demonstração usa dados sintéticos e banco próprio; o checkout principal e os bancos existentes foram preservados.
 
 ## Testes e compilação
 
@@ -63,4 +65,30 @@ Capturas e downloads locais em `target/validacao-mvp/` (ignorados pelo Git). Pri
 
 PRs draft: [acesso #9](https://github.com/twkryan/Estacionamento-Spring/pull/9), [operação/backup #11](https://github.com/twkryan/Estacionamento-Spring/pull/11), [consultas/relatórios #12](https://github.com/twkryan/Estacionamento-Spring/pull/12) e [integração #10](https://github.com/twkryan/Estacionamento-Spring/pull/10). Nenhum PR foi mesclado no GitHub.
 
-Execução, primeiro Admin e roteiro: [README](../README.md). A aplicação permanece local, sem cobrança, publicação, landing page ou troca de identidade visual. Não há pendência de implementação ou validação no escopo aprovado; a aceitação e o merge dos PRs ficam para o usuário.
+Execução, primeiro Admin e roteiro: [README](../README.md). A aplicação permanece local, sem cobrança, publicação, landing page ou troca de identidade visual. Naquela validação, não havia pendência de implementação ou validação no escopo aprovado; a aceitação e o merge dos PRs ficaram para o usuário.
+
+## Validação pós-review — 02/10/2026
+
+Este registro complementa a validação original; não substitui seus resultados nem atribui seus 57 testes aos commits pós-review.
+
+### Correções revisadas
+
+| Achado | Commit e PR | Revisão e evidência |
+| --- | --- | --- |
+| P1 — a sessão identificava a conta pelo e-mail mutável; após trocar e reutilizar o endereço, uma sessão de Operador poderia assumir a conta Admin. | `e71d7bda5320d310555905bd03af7211bd2f68bd`, PR #9. | Identidade de sessão passa a usar o ID estável do usuário. Standards: zero achados; Spec: zero achados; 27 testes, sem falhas. |
+| P2 — o menu da entrega de operação apontava para `/movimentacoes` e `/relatorios`, ainda sem rotas naquele módulo. | `6945e028287574cd91467ee0b908aee377879b3a`, PR #11. | O módulo de operação oculta os links enquanto as rotas não existem. Standards: zero achados; Spec: zero achados; 43 testes, sem falhas. |
+| Integração da navegação — as duas rotas estão presentes em consultas. Os links foram restaurados e a regressão exige ambos no menu de `/painel`; cada anchor renderizado é consultado por HTTP para Admin e Operador. | Merge `7e8fa5b2347989a629f021189eb0083abc00264a`, PR #12; pais `3f9da3c5f9d9ceebba3c6270459be7e8b0147b0a` e `7bd06d8e706f603d9ad9f84ea90f4e1ec4e7e8a6`. | Standards: zero violações e smells; Spec: zero itens ausentes, fora de escopo ou incorretos. RED: o teste falhou pelas duas âncoras ausentes; GREEN: 11 testes, sem falhas. |
+
+### Integração e suíte final
+
+- Merge local `99afadbe0af6b617b1de292ec7264978ea88a18a`, pais `e70d1e1694fbe738098f91859fdcfcacce6d00f3` e `7e8fa5b2347989a629f021189eb0083abc00264a`. O merge foi limpo, sem conflitos; o código de aplicação e os testes ficaram idênticos ao commit aprovado de consultas.
+- Java 25.0.4.1; `mvnw.cmd verify` executado em 02/10/2026. Resultado: 59 testes em 11 relatórios Surefire, zero falhas, erros ou skips. O pacote `target/estacionamento-0.0.1-SNAPSHOT.jar` foi gerado.
+- Log local: `target/post-review-mvnw-verify.log`; relatórios: `target/surefire-reports/`.
+
+### Navegador integrado
+
+- Validação com `mcp__cua_repl` no navegador integrado do Codex, usando a aplicação do commit `99afadbe0af6b617b1de292ec7264978ea88a18a` em `127.0.0.1:9022` (processo Java PID 28564), fuso `America/Sao_Paulo` e banco H2 sintético novo `target/post-review-browser-20261002`.
+- Admin e Operador autenticaram-se na mesma aba, em sequência. Em desktop e viewport móvel de 390 × 844, `/painel` exibiu a identidade da sessão e o menu correspondente ao papel; ambos os papéis abriram pelo menu `/movimentacoes` e `/relatorios` nos dois tamanhos.
+- Capturas locais, ignoradas pelo Git: `target/post-review-evidence/admin-desktop-panel.jpg`, `admin-mobile-panel.jpg`, `operator-desktop-panel.jpg` e `operator-mobile-panel.jpg`. A aba permanece no painel em `http://127.0.0.1:9022/painel` com viewport padrão.
+
+PRs #9, #10, #11 e #12 permanecem drafts; a aceitação e o merge ficam a critério do usuário. Nenhum PR foi mesclado no GitHub.
