@@ -31,9 +31,9 @@ class ConcorrenciaAcessoTests extends HttpTestSupport {
             var a = primeiro.get(15, TimeUnit.SECONDS);
             var b = segundo.get(15, TimeUnit.SECONDS);
             long criados = java.util.stream.Stream.of(a,b)
-                    .filter(r -> "/?cadastro".equals(r.getResponse().getRedirectedUrl())).count();
+                    .filter(r -> "/login?cadastro".equals(r.getResponse().getRedirectedUrl())).count();
             assertThat(criados).isEqualTo(1);
-            String email = "/?cadastro".equals(a.getResponse().getRedirectedUrl()) ? "primeiro@example.com" : "segundo@example.com";
+            String email = "/login?cadastro".equals(a.getResponse().getRedirectedUrl()) ? "primeiro@example.com" : "segundo@example.com";
             var vencedor = login(email, "SenhaDeTeste");
             assertThat(pagina("/usuarios", vencedor).select("#usuarios tr")).hasSize(1);
             assertThat(pagina("/usuarios", vencedor).text()).contains("ADMIN");

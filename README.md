@@ -30,7 +30,7 @@ Abra o PowerShell na pasta do projeto:
 .\mvnw.cmd spring-boot:run
 ```
 
-Acesse <http://localhost:8080>. Para encerrar, pressione `Ctrl+C` no terminal.
+Acesse <http://localhost:8080> para conhecer o produto e clique em **Acessar sistema** para abrir <http://localhost:8080/login>. Para encerrar, pressione `Ctrl+C` no terminal.
 
 A aplicação escuta somente no computador local. Se a porta 8080 já estiver em uso, escolha uma porta livre sem encerrar a outra aplicação:
 
@@ -48,7 +48,7 @@ Nesse caso, acesse <http://localhost:8982>. Reiniciar com o mesmo caminho de ban
 
 ## Primeiro acesso e papéis
 
-Em uma base nova, abra **Criar conta Admin** na tela de login e preencha os dados solicitados. O primeiro cadastro cria o Admin; cadastros posteriores exigem uma sessão de Admin. Entre usando o e-mail e a senha cadastrados.
+Em uma base nova, abra **Criar conta Admin** em `/login` e preencha os dados solicitados. O primeiro cadastro cria o Admin; cadastros posteriores exigem uma sessão de Admin. Entre usando o e-mail e a senha cadastrados.
 
 O Admin gerencia usuários e configurações e também opera e consulta. O Operador registra entradas e saídas e consulta o painel, as movimentações e os relatórios. A gestão permite editar dados e papéis ou desativar contas, preservando pelo menos um Admin ativo. Use **Sair** para encerrar a sessão.
 

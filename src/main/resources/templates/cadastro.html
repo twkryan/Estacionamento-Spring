@@ -10,6 +10,6 @@
         <div th:replace="~{fragments :: dadosUsuario}"></div>
         <label for="inputSenhaCadastro">Senha (mínimo de 8 caracteres)</label><input type="password" id="inputSenhaCadastro" name="inputSenhaCadastro" required minlength="8" maxlength="72" autocomplete="new-password">
         <div th:unless="${baseNova}"><label for="papel">Papel</label><select id="papel" name="papel"><option value="OPERADOR">Operador</option><option value="ADMIN">Admin</option></select></div>
-        <div class="acoes"><button type="submit">Cadastrar</button><a th:href="${conectado ? '/usuarios' : '/'}">Voltar</a></div>
+        <div class="acoes"><button type="submit">Cadastrar</button><a th:href="${conectado ? '/usuarios' : '/login'}">Voltar</a></div>
     </form>
 </section></main></body></html>

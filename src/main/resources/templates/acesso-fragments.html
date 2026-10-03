@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${'Estacionamento - ' + titulo}">Estacionamento</title>
+    <link rel="stylesheet" th:href="@{/css/acesso.css}">
+</head>
+<body>
+<a class="marca" th:fragment="marca" th:href="@{/}">
+    <span class="marca-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 8 2-4h10l2 4M3 9h18v9H3zM6 18v2m12-2v2M6 12h2m8 0h2"/></svg></span>
+    <span>Estacionamento</span>
+</a>
+<svg th:fragment="seta" class="seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>
+</body>
+</html>

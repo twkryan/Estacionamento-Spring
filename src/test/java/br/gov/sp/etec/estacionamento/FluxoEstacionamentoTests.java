@@ -32,8 +32,8 @@ class FluxoEstacionamentoTests extends HttpTestSupport {
     @Test
     void emailNaoCadastradoMostraErroDeCredenciaisSemFalhaInterna() throws Exception {
         mvc.perform(post("/autenticar").with(csrf()).param("inputEmail", "inexistente@example.com")
-                .param("inputSenha", "SenhaIncorreta")).andExpect(redirectedUrl("/?erro"));
-        assertThat(pagina("/?erro", new org.springframework.mock.web.MockHttpSession()).text()).contains("Email ou senha inválidos");
+                .param("inputSenha", "SenhaIncorreta")).andExpect(redirectedUrl("/login?erro"));
+        assertThat(pagina("/login?erro", new org.springframework.mock.web.MockHttpSession()).text()).contains("Email ou senha inválidos");
     }
     @Test
     void voltarAoPainelDisponibilizaLinksAbsolutosParaEntradaESaida() throws Exception {
@@ -54,6 +54,6 @@ class FluxoEstacionamentoTests extends HttpTestSupport {
         assertThat(page.selectFirst("#inputDataNascimentoCadastro").val()).isEqualTo("2000-01-01");
         assertThat(page.select("input[type=password]").attr("value")).isEmpty();
         mvc.perform(post("/autenticar").with(csrf()).param("inputEmail", "regressao@example.com")
-                .param("inputSenha", "SenhaIncorreta")).andExpect(redirectedUrl("/?erro"));
+                .param("inputSenha", "SenhaIncorreta")).andExpect(redirectedUrl("/login?erro"));
     }
 }
