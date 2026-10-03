@@ -52,6 +52,15 @@ class RelatorioHttpTests extends HttpTestSupport {
         assertThat(pagina.selectFirst("#exportar-csv").attr("href"))
                 .contains("placa=ABC1234", "dataInicio=2025-07-01", "dataFim=2025-07-01");
         assertThat(pagina.select("nav a[href='/relatorios']")).hasSize(1);
+        assertThat(pagina.select("nav a[aria-current=page]").attr("href")).isEqualTo("/relatorios");
+        assertThat(pagina.selectFirst("#placa").val()).isEqualTo("ABC1234");
+        assertThat(pagina.selectFirst("#dataInicio").val()).isEqualTo("2025-07-01");
+        assertThat(pagina.selectFirst("#dataFim").val()).isEqualTo("2025-07-01");
+        assertThat(pagina.selectFirst("form[aria-label='Filtros do relatório']").attr("method")).isEqualTo("get");
+        assertThat(pagina.select("a").stream().filter(a -> a.text().equals("Limpar filtros"))
+                .map(a -> a.attr("href"))).containsExactly("/relatorios");
+        assertThat(pagina.selectFirst("section[aria-label='Resumo do relatório']").text()).contains("Resumo filtrado");
+        assertThat(pagina.selectFirst("section[aria-labelledby=titulo-ocupacao]").text()).contains("Os filtros acima não alteram");
         assertThat(pagina.select(".tabela[role=region][aria-label='Movimentações do relatório'][tabindex=0]")).hasSize(1);
         assertThat(pagina.selectFirst("#orientacao-rolagem").text())
                 .contains("Em telas estreitas, deslize a tabela");
@@ -103,6 +112,7 @@ class RelatorioHttpTests extends HttpTestSupport {
         assertThat(pagina.selectFirst("h1").text()).isEqualTo("Relatórios");
         assertThat(pagina.select("nav a[href='/relatorios']")).hasSize(1);
         assertThat(pagina.selectFirst("#exportar-csv")).isNotNull();
+        assertThat(pagina.select("nav a[aria-current=page]").attr("href")).isEqualTo("/relatorios");
         assertThat(resposta.getContentType()).isEqualTo("text/csv;charset=UTF-8");
     }
 
@@ -144,7 +154,43 @@ class RelatorioHttpTests extends HttpTestSupport {
         assertThat(vazio.selectFirst("#sem-media")).isNotNull();
         assertThat(invalido.selectFirst(".mensagem.erro").text())
                 .isEqualTo("A data inicial não pode ser posterior à data final.");
-        assertThat(invalido.selectFirst("#total-movimentacoes").text()).isEqualTo("0");
+        assertThat(invalido.select("#total-movimentacoes, #media-permanencia, #sem-media, #estado-vazio, #tabela-movimentacoes, #exportar-csv")).isEmpty();
+        assertThat(invalido.selectFirst("#estado-invalido").text()).contains("Consulta não realizada");
+        assertThat(invalido.selectFirst("#exportacao-filtro-invalido").text()).contains("Corrija os filtros");
+        assertThat(invalido.selectFirst("#dataInicio").val()).isEqualTo("2025-07-02");
+        assertThat(invalido.selectFirst("#dataFim").val()).isEqualTo("2025-07-01");
+        assertThat(invalido.selectFirst("#capacidade-atual").text()).isEqualTo("30");
+        assertThat(invalido.selectFirst("#ocupacao-atual").text()).isEqualTo("0");
+        assertThat(invalido.selectFirst("#vagas-disponiveis").text()).isEqualTo("30");
+
+        configuracoes.findById(1L).orElseThrow().setExportacao(false);
+        var invalidoSemExportacao = pagina("/relatorios?dataInicio=2025-07-02&dataFim=2025-07-01", admin);
+        assertThat(invalidoSemExportacao.select("#exportar-csv, #exportacao-filtro-invalido")).isEmpty();
+        assertThat(invalidoSemExportacao.selectFirst("#exportacao-desabilitada")).isNotNull();
+    }
+
+    @Test
+    void resumoSemVisitasEncerradasMantemOcupacaoGlobalELimpezaRestauraConsulta() throws Exception {
+        iniciarAdmin();
+        salvar("ABC-1234", "Aberta da consulta", LocalDateTime.of(2025, 7, 1, 8, 30), null);
+        salvar("ZZZ-9999", "Encerrada fora da consulta", LocalDateTime.of(2025, 7, 2, 8, 30),
+                LocalDateTime.of(2025, 7, 2, 10, 0));
+        salvar("DEF-5678", "Aberta fora da consulta", LocalDateTime.of(2025, 7, 3, 10, 0), null);
+
+        var filtrado = pagina("/relatorios?placa=abc1234&dataInicio=2025-07-01&dataFim=2025-07-01", admin);
+        assertThat(filtrado.selectFirst("#total-movimentacoes").text()).isEqualTo("1");
+        assertThat(filtrado.select("#media-permanencia")).isEmpty();
+        assertThat(filtrado.selectFirst("#sem-media").text()).contains("Não há visitas encerradas");
+        assertThat(filtrado.selectFirst("#ocupacao-atual").text()).isEqualTo("2");
+        assertThat(filtrado.selectFirst("#vagas-disponiveis").text()).isEqualTo("28");
+
+        var semFiltros = pagina("/relatorios", admin);
+        assertThat(semFiltros.selectFirst("#total-movimentacoes").text()).isEqualTo("3");
+        assertThat(semFiltros.selectFirst("#media-permanencia").text()).isEqualTo("1h 30min");
+        assertThat(semFiltros.selectFirst("#ocupacao-atual").text()).isEqualTo("2");
+        assertThat(semFiltros.selectFirst("#placa").val()).isEmpty();
+        assertThat(semFiltros.selectFirst("#dataInicio").val()).isEmpty();
+        assertThat(semFiltros.selectFirst("#dataFim").val()).isEmpty();
     }
 
     @Test

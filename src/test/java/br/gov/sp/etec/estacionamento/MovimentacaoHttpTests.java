@@ -40,6 +40,8 @@ class MovimentacaoHttpTests extends HttpTestSupport {
         assertThat(pagina.selectFirst("#total-movimentacoes").text()).isEqualTo("0");
         assertThat(pagina.text()).contains("Nenhuma movimentação encontrada");
         assertThat(pagina.select("#media-permanencia")).isEmpty();
+        assertThat(pagina.select("nav a[aria-current=page]").attr("href")).isEqualTo("/movimentacoes");
+        assertThat(pagina.select("main#conteudo-principal[tabindex=-1]")).hasSize(1);
     }
 
     @Test
@@ -79,6 +81,13 @@ class MovimentacaoHttpTests extends HttpTestSupport {
         assertThat(pagina.select("#tabela-movimentacoes tbody tr").text())
                 .contains("Início do período", "Fim do período")
                 .doesNotContain("Fora do período", "Outra placa");
+        assertThat(pagina.selectFirst("form[aria-label='Filtros de movimentações']").attr("method")).isEqualTo("get");
+        assertThat(pagina.selectFirst("#placa").val()).isEqualTo("abc1234");
+        assertThat(pagina.selectFirst("#dataInicio").val()).isEqualTo("2025-07-01");
+        assertThat(pagina.selectFirst("#dataFim").val()).isEqualTo("2025-07-01");
+        assertThat(pagina.select("a").stream().filter(a -> a.text().equals("Limpar filtros"))
+                .map(a -> a.attr("href"))).containsExactly("/movimentacoes");
+        assertThat(pagina("/movimentacoes", admin).selectFirst("#total-movimentacoes").text()).isEqualTo("4");
     }
 
     @Test
@@ -92,7 +101,8 @@ class MovimentacaoHttpTests extends HttpTestSupport {
         assertThat(pagina.selectFirst("#placa").val()).isEqualTo("ABC");
         assertThat(pagina.selectFirst("#dataInicio").val()).isEqualTo("2025-07-02");
         assertThat(pagina.selectFirst("#dataFim").val()).isEqualTo("2025-07-01");
-        assertThat(pagina.selectFirst("#total-movimentacoes").text()).isEqualTo("0");
+        assertThat(pagina.select("#total-movimentacoes, #media-permanencia, #sem-media, #estado-vazio, #tabela-movimentacoes")).isEmpty();
+        assertThat(pagina.selectFirst("#estado-invalido").text()).contains("Consulta não realizada", "Corrija os filtros");
     }
 
     @Test
@@ -103,7 +113,8 @@ class MovimentacaoHttpTests extends HttpTestSupport {
 
         assertThat(pagina.selectFirst(".mensagem.erro").text()).isEqualTo("Informe datas de entrada válidas.");
         assertThat(pagina.selectFirst("#dataInicio").val()).isEqualTo("2025-02-30");
-        assertThat(pagina.selectFirst("#total-movimentacoes").text()).isEqualTo("0");
+        assertThat(pagina.select("#total-movimentacoes, #estado-vazio, #tabela-movimentacoes")).isEmpty();
+        assertThat(pagina.selectFirst("#estado-invalido")).isNotNull();
     }
 
     @Test
@@ -117,6 +128,7 @@ class MovimentacaoHttpTests extends HttpTestSupport {
 
         assertThat(pagina.selectFirst("h1").text()).isEqualTo("Movimentações");
         assertThat(pagina.select("nav a[href='/movimentacoes']")).hasSize(1);
+        assertThat(pagina.select("nav a[aria-current=page]").attr("href")).isEqualTo("/movimentacoes");
     }
 
     @Test
