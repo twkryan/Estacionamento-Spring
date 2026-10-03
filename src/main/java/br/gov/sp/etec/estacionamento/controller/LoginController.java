@@ -13,7 +13,11 @@ public class LoginController {
     private final UsuarioService usuarios;
     public LoginController(UsuarioService usuarios) { this.usuarios = usuarios; }
     @GetMapping("/")
-    public String index(Model model) {
+    public String index() {
+        return "landing";
+    }
+    @GetMapping("/login")
+    public String login(Model model) {
         model.addAttribute("baseNova", usuarios.baseNova());
         model.addAttribute("migracao", usuarios.precisaMigrar());
         return "login";
@@ -32,7 +36,7 @@ public class LoginController {
         try {
             if (binding.hasErrors()) throw new IllegalArgumentException("Informe uma data de nascimento válida.");
             usuarios.cadastrar(dados, papel, admin(auth));
-            return admin(auth) ? "redirect:/usuarios?sucesso" : "redirect:/?cadastro";
+            return admin(auth) ? "redirect:/usuarios?sucesso" : "redirect:/login?cadastro";
         } catch (IllegalArgumentException ex) {
             dados.setInputSenhaCadastro(null);
             model.addAttribute("erro", ex.getMessage()); model.addAttribute("baseNova", usuarios.baseNova());

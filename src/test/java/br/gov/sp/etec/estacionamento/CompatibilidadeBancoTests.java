@@ -27,15 +27,15 @@ class CompatibilidadeBancoTests extends HttpTestSupport {
     @Test
     void contaLegadaNaoEPromovidaNemPermiteNovoCadastroPublico() throws Exception {
         mvc.perform(post("/autenticar").with(csrf()).param("inputEmail", "legado@example.com")
-                .param("inputSenha", "SenhaLegada")).andExpect(redirectedUrl("/?erro"));
-        assertThat(pagina("/", new org.springframework.mock.web.MockHttpSession()).text()).contains("migração administrativa");
+                .param("inputSenha", "SenhaLegada")).andExpect(redirectedUrl("/login?erro"));
+        assertThat(pagina("/login", new org.springframework.mock.web.MockHttpSession()).text()).contains("migração administrativa");
         mvc.perform(cadastro("novo@example.com", "ADMIN")).andExpect(status().is3xxRedirection());
     }
     @Test
     void emailsDuplicadosLegadosRecusamLoginSemErroInterno() throws Exception {
         jdbc.update("insert into tb_usuario (input_email_cadastro,input_senha_cadastro) values ('legado@example.com','OutraSenha')");
         mvc.perform(post("/autenticar").with(csrf()).param("inputEmail", "legado@example.com")
-                .param("inputSenha", "SenhaLegada")).andExpect(redirectedUrl("/?erro"));
+                .param("inputSenha", "SenhaLegada")).andExpect(redirectedUrl("/login?erro"));
     }
     @Test
     void migracaoExplicitaEmFixturePreservaCpfTelefoneEHorariosAntigos() throws Exception {

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{acesso-fragments :: head('Apresentação')}"></head>
+<body class="pagina-publica">
+<a class="pular" href="#conteudo">Ir ao conteúdo</a>
+<header class="cabecalho-publico">
+    <a th:replace="~{acesso-fragments :: marca}"></a>
+    <nav aria-label="Navegação da apresentação"><a href="#como-funciona">Como funciona</a><a class="acesso-link" th:href="@{/login}">Acessar sistema</a></nav>
+</header>
+<main id="conteudo">
+    <section class="apresentacao" aria-labelledby="titulo-apresentacao">
+        <p class="sobretitulo">CONTROLE LOCAL DO ESTACIONAMENTO</p>
+        <h1 id="titulo-apresentacao">Cada entrada.<br>Cada saída.<br>Tudo sob controle.</h1>
+        <p class="descricao">Da chegada ao histórico, acompanhe as visitas e as vagas do seu estacionamento.</p>
+        <a class="botao primario" th:href="@{/login}">Acessar sistema <svg th:replace="~{acesso-fragments :: seta}"></svg></a>
+        <p class="nota">Admin e Operador. Cada pessoa com seu acesso.</p>
+    </section>
+    <section class="previa" aria-labelledby="titulo-previa">
+        <header class="previa-cabecalho"><h2 id="titulo-previa">Painel do estacionamento</h2><p>Dados demonstrativos — exemplo</p></header>
+        <dl class="indicadores-exemplo"><div><dt>Capacidade</dt><dd>30 <span>vagas</span></dd></div><div><dt>Ocupação atual</dt><dd>4 <span>veículos</span></dd></div><div><dt>Vagas disponíveis</dt><dd>26 <span>vagas</span></dd></div></dl>
+        <h3 class="titulo-entradas">Entradas abertas <span>4</span></h3>
+        <p id="instrucao-tabela" class="instrucao-tabela">Em telas estreitas, deslize a tabela para ver as demais colunas.</p>
+        <div class="tabela-exemplo" tabindex="0" role="region" aria-label="Entradas abertas demonstrativas" aria-describedby="instrucao-tabela">
+            <table><caption class="somente-leitor">Quatro entradas abertas fictícias; horários de exemplo.</caption><thead><tr><th scope="col">Placa</th><th scope="col">Modelo</th><th scope="col">Entrada</th><th scope="col">Status</th></tr></thead>
+                <tbody>
+                    <tr><td class="placa">ABC-1234</td><td>Honda Civic</td><td class="horario">08:30</td><td><span class="status-exemplo">Entrada aberta</span></td></tr>
+                    <tr><td class="placa">ABC1D23</td><td>Toyota Corolla</td><td class="horario">09:15</td><td><span class="status-exemplo">Entrada aberta</span></td></tr>
+                    <tr><td class="placa">ZZZ-9999</td><td>Fiat Argo</td><td class="horario">10:05</td><td><span class="status-exemplo">Entrada aberta</span></td></tr>
+                    <tr><td class="placa">ABC-5678</td><td>Volkswagen Polo</td><td class="horario">10:40</td><td><span class="status-exemplo">Entrada aberta</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <section id="como-funciona" class="como-funciona" aria-labelledby="titulo-fluxo">
+        <p class="sobretitulo">UMA VISITA, DO INÍCIO AO FIM</p><h2 id="titulo-fluxo">O fluxo é simples.<br>O registro fica completo.</h2>
+        <ol class="fluxo"><li><span class="etapa" aria-hidden="true">01</span><h3>Registre a entrada</h3><p>Placa, modelo, cor e uma observação, se necessário.</p></li><li><span class="etapa" aria-hidden="true">02</span><h3>Acompanhe a permanência</h3><p>Entradas abertas e vagas disponíveis em um só lugar.</p></li><li><span class="etapa" aria-hidden="true">03</span><h3>Confirme a saída</h3><p>A vaga é liberada. A visita permanece no histórico.</p></li></ol>
+    </section>
+    <section class="papeis" aria-labelledby="titulo-papeis"><h2 id="titulo-papeis">A operação e a gestão,<br>com os acessos certos.</h2><div><h3>Operador</h3><p>Registra entradas e saídas. Consulta movimentações e relatórios.</p></div><div><h3>Admin</h3><p>Também gerencia usuários, capacidade, opções e backup manual.</p></div></section>
+</main>
+<footer class="rodape-publico"><span>Estacionamento</span><p>Entradas, saídas e histórico. Sem cobrança de tarifas.</p></footer>
+</body>
+</html>

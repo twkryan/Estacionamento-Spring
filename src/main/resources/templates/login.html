@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: head('Login')}"></head>
-<body><main class="acesso"><section class="cartao">
-    <h1>Login</h1><p class="ajuda">Entre para operar o estacionamento.</p>
-    <p th:if="${param.erro}" class="mensagem erro" role="alert">Email ou senha inválidos, ou acesso inativo.</p>
-    <p th:if="${notificacoes == true and param.logout != null}" class="mensagem" role="status">Sessão encerrada.</p>
-    <p th:if="${notificacoes == true and param.cadastro != null}" class="mensagem" role="status">Admin cadastrado. Entre com sua conta.</p>
-    <p th:if="${migracao}" class="mensagem erro" role="alert">Esta base contém usuários legados. O responsável deve concluir a migração administrativa antes de liberar essas contas.</p>
-    <form method="post" th:action="@{/autenticar}">
-        <label for="inputEmail">Email</label><input type="email" id="inputEmail" name="inputEmail" required autocomplete="username">
-        <label for="inputSenha">Senha</label><input type="password" id="inputSenha" name="inputSenha" required autocomplete="current-password">
-        <div class="acoes"><button type="submit">Entrar</button></div>
-    </form>
-    <p th:if="${baseNova}" class="ajuda">Primeiro acesso? <a href="/cadastro">Criar conta Admin</a></p>
-    <p th:unless="${baseNova}" class="ajuda">Para obter acesso, procure o Admin.</p>
-</section></main></body></html>
+<head th:replace="~{acesso-fragments :: head('Login')}"></head>
+<body class="pagina-publica">
+<a class="pular" href="#conteudo">Ir ao conteúdo</a>
+<header class="cabecalho-publico cabecalho-login"><a th:replace="~{acesso-fragments :: marca}"></a><a class="acesso-link" th:href="@{/}">← Voltar à apresentação</a></header>
+<main id="conteudo" class="acesso-layout">
+    <section class="acesso-apresentacao" aria-labelledby="titulo-acesso"><p class="sobretitulo">SEU PÁTIO, SOB CONTROLE</p><h1 id="titulo-acesso">Entre.<br>A operação<br>continua.</h1><p>Entradas, saídas e movimentações.<br>Cada pessoa com seu acesso.</p></section>
+    <section class="acesso-formulario" aria-labelledby="titulo-formulario">
+        <p class="sobretitulo">ACESSO LOCAL</p><h2 id="titulo-formulario">Acessar sistema</h2><p class="ajuda">Entre com a conta da sua equipe.</p>
+        <p th:if="${param.erro}" class="mensagem erro" role="alert">Email ou senha inválidos, ou acesso inativo.</p>
+        <p th:if="${notificacoes == true and param.logout != null}" class="mensagem" role="status">Sessão encerrada.</p>
+        <p th:if="${notificacoes == true and param.cadastro != null}" class="mensagem" role="status">Admin cadastrado. Entre com sua conta.</p>
+        <p th:if="${migracao}" class="mensagem erro" role="alert">Esta base contém usuários legados. O responsável deve concluir a migração administrativa antes de liberar essas contas.</p>
+        <form method="post" th:action="@{/autenticar}">
+            <div class="campo"><label for="inputEmail">Email</label><input type="email" id="inputEmail" name="inputEmail" required autocomplete="username" placeholder="voce@exemplo.com"></div>
+            <div class="campo"><label for="inputSenha">Senha</label><input type="password" id="inputSenha" name="inputSenha" required autocomplete="current-password" placeholder="Sua senha"></div>
+            <button class="botao primario" type="submit">Acessar sistema <svg th:replace="~{acesso-fragments :: seta}"></svg></button>
+        </form>
+        <p th:if="${baseNova}" class="orientacao">Primeiro acesso? <a th:href="@{/cadastro}">Criar conta Admin</a></p>
+        <p th:unless="${baseNova}" class="orientacao">Para obter acesso, procure o Admin.</p>
+    </section>
+</main>
+</body>
+</html>

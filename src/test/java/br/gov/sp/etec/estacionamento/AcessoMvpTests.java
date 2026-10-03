@@ -63,12 +63,12 @@ class AcessoMvpTests extends HttpTestSupport {
     void loginInvalidoNaoGeraErroInternoELogoutEncerraSessao() throws Exception {
         iniciarAdmin();
         mvc.perform(post("/autenticar").with(csrf()).param("inputEmail", "inexistente@example.com")
-                .param("inputSenha", "SenhaIncorreta")).andExpect(redirectedUrl("/?erro"));
+                .param("inputSenha", "SenhaIncorreta")).andExpect(redirectedUrl("/login?erro"));
         mvc.perform(post("/autenticar").with(csrf()).param("inputEmail", "admin@example.com")
-                .param("inputSenha", "SenhaIncorreta")).andExpect(redirectedUrl("/?erro"));
-        assertThat(pagina("/?erro", new org.springframework.mock.web.MockHttpSession()).text()).contains("Email ou senha inválidos");
-        mvc.perform(post("/logout").session(admin).with(csrf())).andExpect(redirectedUrl("/?logout"));
-        assertThat(pagina("/?logout", new org.springframework.mock.web.MockHttpSession()).select("p.mensagem").text())
+                .param("inputSenha", "SenhaIncorreta")).andExpect(redirectedUrl("/login?erro"));
+        assertThat(pagina("/login?erro", new org.springframework.mock.web.MockHttpSession()).text()).contains("Email ou senha inválidos");
+        mvc.perform(post("/logout").session(admin).with(csrf())).andExpect(redirectedUrl("/login?logout"));
+        assertThat(pagina("/login?logout", new org.springframework.mock.web.MockHttpSession()).select("p.mensagem").text())
                 .contains("Sessão encerrada");
         mvc.perform(get("/painel")).andExpect(status().is3xxRedirection());
         assertThat(admin.isInvalid()).isTrue();
@@ -78,16 +78,16 @@ class AcessoMvpTests extends HttpTestSupport {
     void confirmacoesDeAutenticacaoRespeitamOpcaoDeNotificacoesMasErrosPermanecem() throws Exception {
         iniciarAdmin();
         var anonimo = new org.springframework.mock.web.MockHttpSession();
-        assertThat(pagina("/?cadastro", anonimo).select("p.mensagem").text())
+        assertThat(pagina("/login?cadastro", anonimo).select("p.mensagem").text())
                 .contains("Admin cadastrado");
 
         mvc.perform(post("/configuracoes/opcoes").session(admin).with(csrf())
                         .param("backup", "true").param("exportacao", "true"))
                 .andExpect(status().is3xxRedirection());
 
-        assertThat(pagina("/?logout", anonimo).select("p.mensagem")).isEmpty();
-        assertThat(pagina("/?cadastro", anonimo).select("p.mensagem")).isEmpty();
-        assertThat(pagina("/?erro", anonimo).select(".erro").text())
+        assertThat(pagina("/login?logout", anonimo).select("p.mensagem")).isEmpty();
+        assertThat(pagina("/login?cadastro", anonimo).select("p.mensagem")).isEmpty();
+        assertThat(pagina("/login?erro", anonimo).select(".erro").text())
                 .contains("Email ou senha inválidos");
         assertThat(pagina("/usuarios?sucesso", admin).select("p.mensagem")).isEmpty();
     }
@@ -96,7 +96,7 @@ class AcessoMvpTests extends HttpTestSupport {
     void alteracaoSemCsrfNaoCriaPrimeiraConta() throws Exception {
         mvc.perform(post("/efetuarCadastro").param("inputEmailCadastro", "ataque@example.com"))
                 .andExpect(status().isForbidden());
-        assertThat(pagina("/", new org.springframework.mock.web.MockHttpSession()).text()).contains("Criar conta Admin");
+        assertThat(pagina("/login", new org.springframework.mock.web.MockHttpSession()).text()).contains("Criar conta Admin");
     }
 
     @Test
@@ -119,7 +119,7 @@ class AcessoMvpTests extends HttpTestSupport {
                 .andExpect(status().is3xxRedirection());
         mvc.perform(get("/painel").session(operador)).andExpect(status().is3xxRedirection());
         mvc.perform(post("/autenticar").with(csrf()).param("inputEmail", "operador@example.com")
-                .param("inputSenha", "SenhaDeTeste")).andExpect(redirectedUrl("/?erro"));
+                .param("inputSenha", "SenhaDeTeste")).andExpect(redirectedUrl("/login?erro"));
         String adminId = pagina("/usuarios", admin).select("#usuarios tr").stream()
                 .filter(row -> row.text().contains("admin@example.com")).findFirst().orElseThrow().attr("data-id");
         var falha = mvc.perform(editar(adminId, "admin@example.com", "OPERADOR", false).session(admin))

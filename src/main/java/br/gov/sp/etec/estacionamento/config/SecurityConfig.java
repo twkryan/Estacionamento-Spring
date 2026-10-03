@@ -35,14 +35,14 @@ public class SecurityConfig {
     SecurityFilterChain filtro(HttpSecurity http, UsuarioRepository usuarios) throws Exception {
         http.addFilterBefore(new SessaoAtualFilter(usuarios), org.springframework.security.web.access.intercept.AuthorizationFilter.class);
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/cadastro", "/efetuarCadastro", "/css/**", "/error").permitAll()
+                        .requestMatchers("/", "/login", "/cadastro", "/efetuarCadastro", "/css/**", "/error").permitAll()
                         .requestMatchers("/usuarios/**", "/configuracoes/**").hasRole("ADMIN")
                         .requestMatchers("/h2-console/**").denyAll()
                         .anyRequest().authenticated())
-                .formLogin(login -> login.loginPage("/").loginProcessingUrl("/autenticar")
+                .formLogin(login -> login.loginPage("/login").loginProcessingUrl("/autenticar")
                         .usernameParameter("inputEmail").passwordParameter("inputSenha")
-                        .defaultSuccessUrl("/painel", true).failureUrl("/?erro").permitAll())
-                .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/?logout"))
+                        .defaultSuccessUrl("/painel", true).failureUrl("/login?erro").permitAll())
+                .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/login?logout"))
                 .exceptionHandling(errors -> errors.accessDeniedPage("/acesso-negado"));
         return http.build();
     }
