@@ -82,7 +82,7 @@ class LandingAcessoTests extends HttpTestSupport {
             mvc.perform(get(rota)).andExpect(redirectedUrl("/login"));
         }
         iniciarAdmin();
-        assertThat(pagina("/painel", admin).text()).contains("Painel Estacionamento");
+        assertThat(pagina("/painel", admin).selectFirst("#titulo-painel").text()).isEqualTo("Painel");
         assertThat(pagina("/painel", admin).select("link[rel=stylesheet]").attr("href")).isEqualTo("/css/app.css");
         assertThat(pagina("/", admin).text()).doesNotContain("admin@example.com");
     }
