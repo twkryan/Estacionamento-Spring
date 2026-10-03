@@ -2,14 +2,26 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head('Registrar Entrada')}"></head>
 <body><header th:replace="~{fragments :: nav}"></header>
-<main><section class="cartao"><h1>Registrar Entrada</h1>
+<main id="conteudo-principal" tabindex="-1">
+    <div class="barra-contexto"><span>Estacionamento / Registrar entrada</span><span th:text="${admin ? 'Admin' : 'Operador'}"></span></div>
+    <header class="cabecalho-pagina"><div><p class="sobretitulo">Operação</p><h1>Registrar Entrada</h1><p class="ajuda">Uma nova visita começa aqui.</p></div></header>
     <div th:replace="~{fragments :: mensagens}"></div>
-    <p class="ajuda" th:text="${'Vagas disponíveis: ' + indicadores.vagasDisponiveis}"></p>
-    <form method="post" th:action="@{/veiculo/cadastrar}" th:object="${veiculo}">
-        <label for="placa">Placa</label><input type="text" id="placa" th:field="*{placa}" placeholder="Ex: ABC1D23" maxlength="20" required>
-        <label for="modelo">Modelo</label><input type="text" id="modelo" th:field="*{modelo}" placeholder="Ex: Honda Civic" maxlength="120" required>
-        <label for="cor">Cor</label><input type="text" id="cor" th:field="*{cor}" placeholder="Ex: Preto" maxlength="80" required>
-        <label for="observacao">Observação</label><textarea id="observacao" th:field="*{observacao}" placeholder="Digite alguma observação..." maxlength="255"></textarea>
-        <div class="acoes"><button type="submit">Registrar Entrada</button><a href="/painel">Voltar</a></div>
-    </form>
-</section></main></body></html>
+    <div class="entrada-layout">
+        <form class="cartao" method="post" th:action="@{/veiculo/cadastrar}" th:object="${veiculo}">
+            <label for="placa">Placa</label><input type="text" id="placa" th:field="*{placa}" placeholder="ABC1D23" maxlength="20" required aria-describedby="placa-ajuda" autocomplete="off" spellcheck="false">
+            <div class="campos">
+                <div><label for="modelo">Modelo</label><input type="text" id="modelo" th:field="*{modelo}" placeholder="Honda Civic" maxlength="120" required></div>
+                <div><label for="cor">Cor</label><input type="text" id="cor" th:field="*{cor}" placeholder="Preto" maxlength="80" required></div>
+            </div>
+            <label for="observacao">Observação <span class="ajuda">(opcional)</span></label><textarea id="observacao" th:field="*{observacao}" placeholder="Algum detalhe sobre esta entrada?" maxlength="255"></textarea>
+            <div class="acoes"><button type="submit">Registrar Entrada <span aria-hidden="true">→</span></button><a href="/painel">Voltar ao painel</a></div>
+        </form>
+        <aside class="resumo-entrada" aria-labelledby="titulo-resumo">
+            <p id="titulo-resumo" class="sobretitulo">Antes de registrar</p>
+            <strong id="vagas-entrada" th:text="${indicadores.vagasDisponiveis}"></strong><p class="ajuda">vagas disponíveis</p>
+            <p class="ajuda" th:if="${indicadores.vagasDisponiveis == 0}">Estacionamento lotado. <a href="/veiculo/registrar-saida">Registre uma saída</a> para liberar uma vaga.</p>
+            <p class="ajuda">O horário de entrada é registrado pelo sistema.</p><hr>
+            <p class="ajuda" id="placa-ajuda">Uma placa pode ter várias visitas, mas somente uma entrada aberta por vez.</p>
+        </aside>
+    </div>
+</main></body></html>

@@ -7,21 +7,54 @@
     <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
-<header class="topo" th:fragment="nav">
-    <a class="marca" href="/painel">Estacionamento</a>
-    <nav aria-label="Navegação principal">
-        <a href="/painel">Painel</a>
-        <a href="/veiculo/registrar-entrada">Registrar Entrada</a>
-        <a href="/veiculo/registrar-saida">Registrar Saída</a>
-        <a href="/movimentacoes">Movimentações</a>
-        <a href="/relatorios">Relatórios</a>
-        <a th:if="${admin}" href="/configuracoes">Configurações</a>
-        <a th:if="${admin}" href="/usuarios">Usuários</a>
+<header class="topo" th:fragment="nav" th:with="pagina=${#execInfo.processedTemplateName}">
+    <a class="pular-conteudo" href="#conteudo-principal">Pular para o conteúdo</a>
+    <div class="linha-marca">
+        <a class="marca" href="/painel"><span class="marca-simbolo" aria-hidden="true">P</span>Estacionamento</a>
+        <button class="alternar-nav secundario" type="button" aria-expanded="true" aria-controls="nav-principal">Menu</button>
+    </div>
+    <div class="contexto-patio"><span aria-hidden="true">E</span><div>Estacionamento<small>Controle de entradas e saídas</small></div></div>
+    <nav id="nav-principal" aria-label="Navegação principal">
+        <div class="grupo-nav">
+            <p>Operação</p>
+            <a href="/painel" th:attr="aria-current=${pagina == 'painel' ? 'page' : null}">Painel</a>
+            <a href="/veiculo/registrar-entrada" th:attr="aria-current=${pagina == 'registrar-entrada' ? 'page' : null}">Registrar Entrada</a>
+            <a href="/veiculo/registrar-saida" th:attr="aria-current=${pagina == 'registrar-saida' ? 'page' : null}">Registrar Saída</a>
+        </div>
+        <div class="grupo-nav">
+            <p>Consultas</p>
+            <a href="/movimentacoes" th:attr="aria-current=${pagina == 'movimentacoes' ? 'page' : null}">Movimentações</a>
+            <a href="/relatorios" th:attr="aria-current=${pagina == 'relatorios' ? 'page' : null}">Relatórios</a>
+        </div>
+        <div class="grupo-nav" th:if="${admin}">
+            <p>Administração</p>
+            <a href="/configuracoes" th:attr="aria-current=${pagina == 'configuracoes' ? 'page' : null}">Configurações</a>
+            <a href="/usuarios" th:attr="aria-current=${pagina == 'usuarios' or pagina == 'usuario-editar' or pagina == 'cadastro' ? 'page' : null}">Usuários</a>
+        </div>
     </nav>
     <div class="sessao">
-        <span th:text="${emailAtual}"></span>
+        <div><strong th:text="${admin ? 'Admin' : 'Operador'}"></strong><span th:text="${emailAtual}"></span></div>
         <form method="post" th:action="@{/logout}"><button class="secundario" type="submit">Sair</button></form>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const conteudo = document.querySelector('main');
+            if (conteudo) {
+                conteudo.id = 'conteudo-principal';
+                conteudo.tabIndex = -1;
+            }
+            const topo = document.querySelector('.topo');
+            const botao = topo.querySelector('.alternar-nav');
+            const celular = window.matchMedia('(max-width: 760px)');
+            const abrirMenu = (abrir) => {
+                topo.toggleAttribute('data-nav-fechada', !abrir);
+                botao.setAttribute('aria-expanded', String(abrir));
+            };
+            abrirMenu(!celular.matches);
+            celular.addEventListener('change', () => abrirMenu(!celular.matches));
+            botao.addEventListener('click', () => abrirMenu(botao.getAttribute('aria-expanded') !== 'true'));
+        });
+    </script>
 </header>
 <div th:fragment="mensagens">
     <p class="mensagem erro" role="alert" th:if="${erro}" th:text="${erro}"></p>

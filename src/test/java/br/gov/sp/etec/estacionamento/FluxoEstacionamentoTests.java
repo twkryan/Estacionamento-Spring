@@ -24,8 +24,8 @@ class FluxoEstacionamentoTests extends HttpTestSupport {
                 .param("placa", "NAV7G89").param("modelo", "Teste de navegação").param("cor", "Azul"))
                 .andExpect(status().isOk()).andReturn();
         var page = Jsoup.parse(response.getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8));
-        assertThat(page.select("a[href='/veiculo/registrar-entrada']")).hasSize(1);
-        assertThat(page.select("a[href='/veiculo/registrar-saida']")).hasSize(1);
+        assertThat(page.select("nav a[href='/veiculo/registrar-entrada']")).hasSize(1);
+        assertThat(page.select("nav a[href='/veiculo/registrar-saida']")).hasSize(1);
         mvc.perform(get("/veiculo/registrar-entrada").session(admin)).andExpect(status().isOk());
         mvc.perform(get("/veiculo/registrar-saida").session(admin)).andExpect(status().isOk());
     }
@@ -38,14 +38,14 @@ class FluxoEstacionamentoTests extends HttpTestSupport {
     @Test
     void voltarAoPainelDisponibilizaLinksAbsolutosParaEntradaESaida() throws Exception {
         var page = pagina("/painel", admin);
-        assertThat(page.select("a[href='/veiculo/registrar-entrada']")).hasSize(1);
-        assertThat(page.select("a[href='/veiculo/registrar-saida']")).hasSize(1);
+        assertThat(page.select("nav a[href='/veiculo/registrar-entrada']")).hasSize(1);
+        assertThat(page.select("nav a[href='/veiculo/registrar-saida']")).hasSize(1);
     }
     @Test
     void cadastroComCpfETelefoneDeOnzeDigitosPermiteLogin() throws Exception {
         mvc.perform(cadastro("regressao@example.com", "OPERADOR").session(admin)).andExpect(status().is3xxRedirection());
         var usuario = login("regressao@example.com", "SenhaDeTeste");
-        assertThat(pagina("/painel", usuario).text()).contains("Painel Estacionamento");
+        assertThat(pagina("/painel", usuario).selectFirst("#titulo-painel").text()).isEqualTo("Painel");
         String id = pagina("/usuarios", admin).select("#usuarios tr").stream()
                 .filter(row -> row.text().contains("regressao@example.com")).findFirst().orElseThrow().attr("data-id");
         var page = pagina("/usuarios/" + id, admin);

@@ -2,31 +2,39 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head('Painel')}"></head>
 <body><header th:replace="~{fragments :: nav}"></header>
-<main>
-    <section class="cartao" aria-labelledby="titulo-painel">
-        <h1 id="titulo-painel">Painel Estacionamento</h1>
-        <div th:replace="~{fragments :: mensagens}"></div>
-        <div class="indicadores-vagas" aria-label="Indicadores de vagas">
-            <article class="indicador"><span>Capacidade</span><strong id="capacidade-atual" th:text="${indicadores.capacidade}"></strong><span>vagas</span></article>
-            <article class="indicador"><span>Ocupação atual</span><strong id="ocupacao-atual" th:text="${indicadores.ocupacao}"></strong><span>veículos</span></article>
-            <article class="indicador"><span>Vagas disponíveis</span><strong id="vagas-disponiveis" th:text="${indicadores.vagasDisponiveis}"></strong><span>vagas</span></article>
+<main id="conteudo-principal" tabindex="-1">
+    <div class="barra-contexto"><span>Estacionamento / Painel</span><span th:text="${admin ? 'Admin' : 'Operador'}"></span></div>
+    <header class="cabecalho-pagina">
+        <div><p class="sobretitulo">Visão geral</p><h1 id="titulo-painel">Painel</h1><p class="ajuda">Acompanhe as entradas abertas e a disponibilidade do pátio.</p></div>
+        <a class="btn" th:if="${indicadores.vagasDisponiveis > 0}" href="/veiculo/registrar-entrada"><span aria-hidden="true">+</span> Registrar entrada</a>
+        <a class="btn" th:if="${indicadores.vagasDisponiveis == 0}" href="/veiculo/registrar-saida">Registrar saída</a>
+    </header>
+    <div th:replace="~{fragments :: mensagens}"></div>
+    <p class="situacao-patio" th:text="${indicadores.vagasDisponiveis > 0 ? 'Operação em andamento' : 'Estacionamento lotado. Registre uma saída para liberar uma vaga.'}"></p>
+    <div class="indicadores-vagas" aria-label="Indicadores de vagas">
+        <article class="indicador"><span>Capacidade</span><strong id="capacidade-atual" th:text="${indicadores.capacidade}"></strong><span>vagas</span></article>
+        <article class="indicador"><span>Ocupação atual</span><strong id="ocupacao-atual" th:text="${indicadores.ocupacao}"></strong><span>veículos</span></article>
+        <article class="indicador"><span>Vagas disponíveis</span><strong id="vagas-disponiveis" th:text="${indicadores.vagasDisponiveis}"></strong><span>vagas</span></article>
+    </div>
+    <section aria-labelledby="titulo-entradas-painel">
+        <header class="cabecalho-lista"><div><h2 id="titulo-entradas-painel">Entradas abertas <span class="contagem" th:text="${#lists.size(entradas)}"></span></h2><p class="ajuda">Cada linha representa uma visita ao estacionamento.</p></div><a class="btn secundario" href="/veiculo/registrar-saida">Buscar placa</a></header>
+        <p id="estado-vazio" class="estado-vazio" th:if="${#lists.isEmpty(entradas)}">Nenhuma entrada aberta no momento.</p>
+        <p class="ajuda" id="rolagem-painel">Em telas menores, role a tabela para consultar todas as colunas.</p>
+        <div class="tabela" role="region" aria-label="Entradas abertas no painel" aria-describedby="rolagem-painel" tabindex="0">
+            <table id="painel-entradas">
+                <thead><tr><th scope="col">Placa</th><th scope="col">Modelo</th><th scope="col">Cor</th><th scope="col">Entrada</th><th scope="col">Status</th><th scope="col">Ação</th></tr></thead>
+                <tbody id="painel-entradas-corpo">
+                <tr th:each="entrada : ${entradas}">
+                    <td class="placa" th:text="${entrada.placa}"></td>
+                    <td th:text="${entrada.modelo}"></td>
+                    <td th:text="${entrada.cor}"></td>
+                    <td><time th:datetime="${entrada.horaEntrada}" th:text="${#temporals.format(entrada.horaEntrada, 'dd/MM/yyyy HH:mm:ss')}"></time></td>
+                    <td><span class="status-entrada">Entrada aberta</span></td>
+                    <td><a class="btn secundario" th:href="@{/veiculo/registrar-saida(placa=${entrada.placa})}" th:attr="aria-label=${'Registrar saída de ' + entrada.placa}">Registrar saída <span aria-hidden="true">↗</span></a></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-        <section aria-labelledby="titulo-entradas-painel">
-            <h2 id="titulo-entradas-painel">Entradas abertas</h2>
-            <p id="estado-vazio" th:if="${#lists.isEmpty(entradas)}">Nenhuma entrada aberta no momento.</p>
-            <div class="tabela">
-                <table id="painel-entradas">
-                    <thead><tr><th>Placa</th><th>Modelo</th><th>Entrada</th><th>Status</th></tr></thead>
-                    <tbody id="painel-entradas-corpo">
-                    <tr th:each="entrada : ${entradas}">
-                        <td th:text="${entrada.placa}"></td>
-                        <td th:text="${entrada.modelo}"></td>
-                        <td><time th:datetime="${entrada.horaEntrada}" th:text="${#temporals.format(entrada.horaEntrada, 'dd/MM/yyyy HH:mm:ss')}"></time></td>
-                        <td>Entrada aberta</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
+        <p class="rodape-lista" th:text="${#lists.size(entradas) + ' entradas abertas'}"></p>
     </section>
 </main></body></html>
