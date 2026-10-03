@@ -107,6 +107,53 @@ time { white-space: nowrap; font-family: var(--mono); font-size: 11px; }
 .secao-saida { margin-top: 44px; }
 .confirmar-saida { background: transparent; border-color: var(--borda); font-weight: 400; }
 .confirmar-saida:hover { background: var(--campo); }
+.consultas .consulta-filtros { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px 24px; padding: 24px; border: 1px solid var(--borda); border-radius: 16px; background: var(--superficie); }
+.consultas .consulta-campos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.consultas .consulta-campos label { margin: 0 0 10px; }
+.consultas .consulta-campos input { min-height: 46px; padding: 12px; }
+.consultas .consulta-campos input[type=search] { font-family: var(--mono); }
+.consultas .consulta-acoes { display: flex; align-items: end; gap: 16px; }
+.consultas .consulta-acoes a { display: inline-flex; align-items: center; min-height: 46px; font-size: 12px; white-space: nowrap; }
+.consultas .consulta-filtros > .ajuda { grid-column: 1 / -1; margin: 0; font-size: 11px; }
+.consultas .consulta-exportacao { max-width: 280px; padding: 12px 16px; border: 1px solid var(--borda); border-radius: 8px; color: var(--secundario); font-size: 12px; line-height: 1.6; }
+.consultas .consulta-resumo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin: 36px 0 44px; }
+.consultas .consulta-resumo h2 { grid-column: 1 / -1; font-size: 16px; margin: 0; }
+.consultas .consulta-resumo > div { padding-right: 24px; }
+.consultas .consulta-resumo > div:first-of-type { border-right: 1px solid var(--borda); }
+.consultas .consulta-resumo > div > span { display: block; margin-bottom: 12px; color: var(--secundario); font-size: 12px; }
+.consultas .consulta-resumo strong { display: block; font-size: 36px; font-weight: 400; letter-spacing: -1px; }
+.consultas .consulta-resumo .ajuda { margin: 8px 0 0; font-size: 11px; }
+.consultas .consulta-ocupacao { padding: 24px; margin-bottom: 40px; border: 1px solid var(--borda); border-radius: 16px; background: var(--superficie); }
+.consultas .consulta-ocupacao h2 { font-size: 16px; }
+.consultas .consulta-ocupacao .ajuda { font-size: 11px; }
+.consultas .consulta-indicadores { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin-top: 24px; }
+.consultas .consulta-indicadores > div { min-width: 0; padding-right: 20px; border-right: 1px solid var(--borda); }
+.consultas .consulta-indicadores > div:last-child { border-right: 0; padding-right: 0; }
+.consultas .consulta-indicadores span { display: block; color: var(--secundario); font-size: 11px; }
+.consultas .consulta-indicadores span:first-child { min-height: 30px; }
+.consultas .consulta-indicadores strong { display: block; margin: 8px 0; font-size: 28px; font-weight: 400; letter-spacing: -.8px; }
+.consultas .consulta-indicadores meter { display: block; width: 100%; height: 10px; accent-color: var(--secundario); }
+.consultas .consulta-visitas .estado-vazio { padding: 20px 0; }
+.consultas .consulta-visitas .estado-vazio p { margin: 0 0 8px; }
+.consultas .consulta-visitas #orientacao-rolagem { font-size: 11px; }
+.consultas .tabela table { min-width: 760px; }
+.consultas .consulta-permanencia { white-space: nowrap; font-family: var(--mono); font-size: 11px; }
+@media (max-width: 1100px) {
+    .consultas .consulta-filtros { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 760px) {
+    .consultas .consulta-filtros { padding: 20px; gap: 20px; }
+    .consultas .consulta-campos { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+    .consultas .consulta-acoes { gap: 24px; }
+    .consultas .consulta-resumo { gap: 16px; margin: 32px 0; }
+    .consultas .consulta-resumo > div { padding-right: 16px; }
+    .consultas .consulta-resumo strong { font-size: 28px; }
+    .consultas .consulta-ocupacao { padding: 20px; margin-bottom: 32px; }
+    .consultas .consulta-indicadores { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; }
+    .consultas .consulta-indicadores > div { padding-right: 16px; }
+    .consultas .consulta-indicadores > div:nth-child(2n) { border-right: 0; padding-right: 0; }
+    .consultas .consulta-indicadores span:first-child { min-height: 36px; }
+}
 @media (max-width: 1000px) {
     .entrada-layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
     .resumo-entrada { padding: 0; }

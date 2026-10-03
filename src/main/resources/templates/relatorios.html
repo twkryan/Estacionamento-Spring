@@ -2,80 +2,58 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head('Relatórios')}"></head>
 <body><header th:replace="~{fragments :: nav}"></header>
-<main>
-    <section class="cartao">
-        <h1>Relatórios</h1>
-        <p class="ajuda">Consulte as movimentações e os indicadores atuais do estacionamento.</p>
+<main class="consultas" id="conteudo-principal" tabindex="-1">
+    <div class="barra-contexto"><span>Estacionamento / Relatórios</span><span th:text="${admin ? 'Admin' : 'Operador'}"></span></div>
+    <header class="cabecalho-pagina">
+        <div><p class="sobretitulo">Consultas</p><h1>Relatórios</h1><p class="ajuda">Consulte as visitas do período e acompanhe a ocupação atual do estacionamento.</p></div>
+        <a id="exportar-csv" class="btn secundario" th:if="${exportacaoHabilitada and erro == null}" th:href="@{/relatorios/exportar(placa=${placaFiltro},dataInicio=${dataInicioFiltro},dataFim=${dataFimFiltro})}">Exportar CSV <span aria-hidden="true">↓</span></a>
+        <span id="exportacao-desabilitada" class="consulta-exportacao" th:unless="${exportacaoHabilitada}">Exportação CSV desabilitada nas configurações.</span>
+        <span id="exportacao-filtro-invalido" class="consulta-exportacao" th:if="${exportacaoHabilitada and erro != null}">Corrija os filtros para exportar o CSV.</span>
+    </header>
+    <div th:replace="~{fragments :: mensagens}"></div>
 
-        <div th:replace="~{fragments :: mensagens}"></div>
+    <form class="consulta-filtros" method="get" th:action="@{/relatorios}" aria-label="Filtros do relatório" aria-describedby="ajuda-periodo">
+        <div class="consulta-campos">
+            <div><label for="placa">Placa</label><input id="placa" name="placa" type="search" maxlength="20" placeholder="Toda ou parte da placa" th:value="${placaFiltro}"></div>
+            <div><label for="dataInicio">Entrada a partir de</label><input id="dataInicio" name="dataInicio" type="date" th:value="${dataInicioFiltro}"></div>
+            <div><label for="dataFim">Entrada até</label><input id="dataFim" name="dataFim" type="date" th:value="${dataFimFiltro}"></div>
+        </div>
+        <div class="consulta-acoes"><button type="submit">Buscar</button><a th:href="@{/relatorios}">Limpar filtros</a></div>
+        <p id="ajuda-periodo" class="ajuda">O período considera a data de entrada, incluindo o primeiro e o último dia.</p>
+    </form>
 
-        <form method="get" th:action="@{/relatorios}">
-            <div class="campos">
-                <div>
-                    <label for="placa">Placa</label>
-                    <input id="placa" name="placa" type="search" maxlength="20" th:value="${placaFiltro}">
-                </div>
-                <div>
-                    <label for="dataInicio">Entrada a partir de</label>
-                    <input id="dataInicio" name="dataInicio" type="date" th:value="${dataInicioFiltro}">
-                </div>
-                <div>
-                    <label for="dataFim">Entrada até</label>
-                    <input id="dataFim" name="dataFim" type="date" th:value="${dataFimFiltro}">
-                </div>
-            </div>
-            <div class="acoes">
-                <button type="submit">Buscar</button>
-                <a class="btn secundario" th:href="@{/relatorios}">Limpar filtros</a>
-                <a id="exportar-csv" class="btn" th:if="${exportacaoHabilitada}"
-                   th:href="@{/relatorios/exportar(placa=${placaFiltro},dataInicio=${dataInicioFiltro},dataFim=${dataFimFiltro})}">Exportar CSV</a>
-                <span id="exportacao-desabilitada" class="ajuda" th:unless="${exportacaoHabilitada}">
-                    A exportação está desabilitada nas configurações.
-                </span>
-            </div>
-        </form>
+    <p id="estado-invalido" class="estado-vazio" th:if="${erro != null}">Consulta não realizada. Corrija os filtros ou use Limpar filtros para consultar todas as visitas.</p>
 
-        <section aria-label="Resumo do relatório">
-            <h2>Resumo</h2>
-            <p>Total de movimentações: <strong id="total-movimentacoes" th:text="${relatorio.movimentacoes.total}">0</strong></p>
-            <p th:if="${relatorio.movimentacoes.mediaPermanenciaMinutos != null}">
-                Média de permanência:
-                <strong id="media-permanencia" th:text="${relatorio.movimentacoes.mediaPermanenciaFormatada}"></strong>
-            </p>
-            <p id="sem-media" class="ajuda" th:if="${relatorio.movimentacoes.mediaPermanenciaMinutos == null}">
-                Não há visitas encerradas para calcular a média.
-            </p>
-        </section>
+    <section class="consulta-resumo" aria-label="Resumo do relatório" th:if="${erro == null}">
+        <h2>Resumo filtrado</h2>
+        <div><span>Total de movimentações</span><strong id="total-movimentacoes" th:text="${relatorio.movimentacoes.total}">0</strong><p class="ajuda">Visitas incluídas nos filtros aplicados.</p></div>
+        <div><span>Média de permanência</span><strong id="media-permanencia" th:if="${relatorio.movimentacoes.mediaPermanenciaMinutos != null}" th:text="${relatorio.movimentacoes.mediaPermanenciaFormatada}"></strong><strong aria-hidden="true" th:if="${relatorio.movimentacoes.mediaPermanenciaMinutos == null}">—</strong><p class="ajuda" th:if="${relatorio.movimentacoes.mediaPermanenciaMinutos != null}">Somente visitas encerradas da consulta.</p><p id="sem-media" class="ajuda" th:if="${relatorio.movimentacoes.mediaPermanenciaMinutos == null}">Não há visitas encerradas para calcular a média.</p></div>
+    </section>
 
-        <section aria-label="Ocupação atual">
-            <h2>Ocupação atual</h2>
-            <meter id="barra-ocupacao" min="0" max="100" aria-label="Percentual de ocupação"
-                   th:value="${relatorio.indicadores.percentualOcupacao}"></meter>
-            <p>Capacidade: <strong id="capacidade-atual" th:text="${relatorio.indicadores.capacidade}"></strong></p>
-            <p>Veículos no estacionamento: <strong id="ocupacao-atual" th:text="${relatorio.indicadores.ocupacao}"></strong></p>
-            <p>Vagas disponíveis: <strong id="vagas-disponiveis" th:text="${relatorio.indicadores.vagasDisponiveis}"></strong></p>
-            <p>Ocupação: <strong id="percentual-ocupacao" th:text="${relatorio.percentualOcupacaoFormatado}"></strong></p>
-        </section>
+    <section class="consulta-ocupacao" aria-labelledby="titulo-ocupacao">
+        <header class="cabecalho-lista"><div><h2 id="titulo-ocupacao">Ocupação atual</h2><p class="ajuda">Situação de todo o estacionamento agora. Os filtros acima não alteram estes indicadores.</p></div></header>
+        <div class="consulta-indicadores">
+            <div><span>Capacidade</span><strong id="capacidade-atual" th:text="${relatorio.indicadores.capacidade}"></strong><span>vagas</span></div>
+            <div><span>Veículos no estacionamento</span><strong id="ocupacao-atual" th:text="${relatorio.indicadores.ocupacao}"></strong><span>entradas abertas</span></div>
+            <div><span>Vagas disponíveis</span><strong id="vagas-disponiveis" th:text="${relatorio.indicadores.vagasDisponiveis}"></strong><span>vagas</span></div>
+            <div><span>Percentual de ocupação</span><strong id="percentual-ocupacao" th:text="${relatorio.percentualOcupacaoFormatado}"></strong><meter id="barra-ocupacao" min="0" max="100" aria-label="Percentual de ocupação" th:value="${relatorio.indicadores.percentualOcupacao}"></meter></div>
+        </div>
+    </section>
 
-        <p id="estado-vazio" class="ajuda" th:if="${#lists.isEmpty(relatorio.movimentacoes.movimentacoes)}">
-            Nenhuma movimentação encontrada.
-        </p>
-        <p id="orientacao-rolagem" class="ajuda" th:unless="${#lists.isEmpty(relatorio.movimentacoes.movimentacoes)}">
-            Em telas estreitas, deslize a tabela horizontalmente para ver as demais colunas.
-        </p>
-        <div class="tabela" role="region" aria-label="Movimentações do relatório" tabindex="0"
-             th:unless="${#lists.isEmpty(relatorio.movimentacoes.movimentacoes)}">
+    <section class="consulta-visitas" aria-labelledby="titulo-visitas" th:if="${erro == null}">
+        <header class="cabecalho-lista"><div><h2 id="titulo-visitas">Visitas da consulta <span class="contagem" th:text="${relatorio.movimentacoes.total}"></span></h2><p class="ajuda">Cada linha representa uma visita. A permanência das visitas abertas vai até o momento da consulta.</p></div></header>
+        <div class="estado-vazio" th:if="${#lists.isEmpty(relatorio.movimentacoes.movimentacoes)}"><p id="estado-vazio">Nenhuma movimentação encontrada.</p><p class="ajuda">Revise a placa ou o período, ou limpe os filtros para ampliar a consulta.</p></div>
+        <p id="orientacao-rolagem" class="ajuda" th:unless="${#lists.isEmpty(relatorio.movimentacoes.movimentacoes)}">Em telas estreitas, deslize a tabela horizontalmente para ver as demais colunas.</p>
+        <div class="tabela" role="region" aria-label="Movimentações do relatório" aria-describedby="orientacao-rolagem" tabindex="0" th:unless="${#lists.isEmpty(relatorio.movimentacoes.movimentacoes)}">
             <table id="tabela-movimentacoes">
-                <thead>
-                <tr><th>Placa</th><th>Modelo</th><th>Entrada</th><th>Saída</th><th>Permanência</th></tr>
-                </thead>
+                <thead><tr><th scope="col">Placa</th><th scope="col">Modelo</th><th scope="col">Entrada</th><th scope="col">Saída</th><th scope="col">Permanência</th></tr></thead>
                 <tbody>
                 <tr th:each="movimentacao : ${relatorio.movimentacoes.movimentacoes}">
-                    <td th:text="${movimentacao.placa}"></td>
+                    <td class="placa" th:text="${movimentacao.placa}"></td>
                     <td th:text="${movimentacao.modelo}"></td>
-                    <td><time th:text="${movimentacao.horaEntrada == null ? '—' : #temporals.format(movimentacao.horaEntrada, 'dd/MM/yyyy HH:mm')}"></time></td>
-                    <td th:text="${movimentacao.aberta ? 'Visita aberta' : #temporals.format(movimentacao.horaSaida, 'dd/MM/yyyy HH:mm')}"></td>
-                    <td th:text="${movimentacao.permanenciaFormatada}"></td>
+                    <td><time th:datetime="${movimentacao.horaEntrada}" th:text="${movimentacao.horaEntrada == null ? '—' : #temporals.format(movimentacao.horaEntrada, 'dd/MM/yyyy HH:mm')}"></time></td>
+                    <td><span class="status-entrada" th:if="${movimentacao.aberta}">Visita aberta</span><time th:unless="${movimentacao.aberta}" th:datetime="${movimentacao.horaSaida}" th:text="${#temporals.format(movimentacao.horaSaida, 'dd/MM/yyyy HH:mm')}"></time></td>
+                    <td class="consulta-permanencia" th:text="${movimentacao.permanenciaFormatada}"></td>
                 </tr>
                 </tbody>
             </table>
