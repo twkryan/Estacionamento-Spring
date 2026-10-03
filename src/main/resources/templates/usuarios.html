@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head('Usuários')}"></head>
-<body><header th:replace="~{fragments :: nav}"></header>
-<main><section class="cartao">
-    <h1>Usuários</h1><p class="ajuda">Gerencie os acessos e os papéis da equipe.</p>
+<body class="admin-pagina"><header th:replace="~{fragments :: nav}"></header>
+<main id="conteudo-principal" tabindex="-1">
+    <div class="barra-contexto"><span>Estacionamento / Usuários</span><span>Admin</span></div>
+    <header class="cabecalho-pagina"><div><p class="sobretitulo">Administração</p><h1>Usuários</h1><p class="ajuda">Gerencie os acessos e os papéis da equipe.</p></div><a class="btn" href="/cadastro"><span aria-hidden="true">+</span>Cadastrar usuário</a></header>
     <p th:if="${notificacoes == true and param.sucesso != null}" class="mensagem" role="status">Usuário salvo com sucesso.</p>
-    <a class="btn" href="/cadastro">Cadastrar usuário</a>
-    <div class="tabela tabela-usuarios" tabindex="0" role="region" aria-label="Tabela de usuários"><table><thead><tr><th>Nome</th><th>Email</th><th>Papel</th><th>Acesso</th><th>Ação</th></tr></thead>
-    <tbody id="usuarios"><tr th:each="usuario : ${usuarios}" th:attr="data-id=${usuario.id}">
-        <td th:text="${usuario.inputNomeCadastro}"></td><td th:text="${usuario.inputEmailCadastro}"></td>
-        <td th:text="${usuario.papel ?: 'Migração pendente'}"></td><td th:text="${usuario.ativo ? 'Ativo' : 'Inativo'}"></td>
-        <td><a th:href="@{/usuarios/{id}(id=${usuario.id})}" th:attr="aria-label=${'Editar usuário ' + usuario.inputNomeCadastro}">Editar</a></td>
-    </tr></tbody></table></div>
-</section></main></body></html>
+    <section aria-labelledby="titulo-equipe">
+        <div class="cabecalho-lista"><div><h2 id="titulo-equipe">Equipe <span class="contagem" th:text="${#lists.size(usuarios)}"></span></h2><p class="ajuda">O papel define as permissões; o estado indica se a pessoa pode entrar.</p></div></div>
+        <p class="ajuda" id="usuarios-rolagem">Em telas menores, role a tabela para consultar todas as colunas.</p>
+        <div class="tabela tabela-usuarios" tabindex="0" role="region" aria-label="Tabela de usuários" aria-describedby="usuarios-rolagem"><table><thead><tr><th scope="col">Nome</th><th scope="col">Email</th><th scope="col">Papel</th><th scope="col">Acesso</th><th scope="col">Ação</th></tr></thead>
+        <tbody id="usuarios"><tr th:each="usuario : ${usuarios}" th:attr="data-id=${usuario.id}">
+            <td th:text="${usuario.inputNomeCadastro}"></td><td th:text="${usuario.inputEmailCadastro}"></td>
+            <td><span class="admin-papel" th:text="${usuario.papel ?: 'Migração pendente'}"></span></td><td><span class="admin-estado" th:classappend="${usuario.ativo ? '' : 'admin-inativo'}" th:text="${usuario.ativo ? 'Ativo' : 'Inativo'}"></span></td>
+            <td><a class="btn secundario" th:href="@{/usuarios/{id}(id=${usuario.id})}" th:attr="aria-label=${'Editar usuário ' + usuario.inputNomeCadastro}">Editar</a></td>
+        </tr></tbody></table></div>
+        <p class="rodape-lista">Mantenha pelo menos um Admin ativo para administrar o estacionamento.</p>
+    </section>
+</main></body></html>

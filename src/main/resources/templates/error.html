@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" th:fragment="pagina">
+<head th:replace="~{fragments :: head('Erro')}"></head>
+<body class="erro-pagina">
+<header class="admin-marca-publica"><a class="marca" href="/"><span class="marca-simbolo" aria-hidden="true">P</span>Estacionamento</a><a href="/">Voltar à apresentação</a></header>
+<main id="conteudo-principal" tabindex="-1"><section class="erro-estado" aria-labelledby="titulo-erro">
+    <p class="sobretitulo">Não foi possível continuar</p>
+    <span class="erro-codigo" aria-hidden="true" th:text="${status == 404 ? '404' : (status == 403 ? '403' : (status != null and status >= 500 ? '500' : 'Erro'))}"></span>
+    <h1 id="titulo-erro" th:text="${status == 404 ? 'Página não encontrada' : (status == 403 ? 'Acesso negado' : 'Não foi possível concluir a solicitação')}"></h1>
+    <p class="ajuda" role="alert" th:text="${status == 404 ? 'Confira o endereço ou use uma das opções abaixo para continuar.' : (status == 403 ? 'Seu usuário não tem permissão para esta ação.' : 'Tente novamente em alguns instantes. Se o problema continuar, procure o responsável pelo sistema.')}"></p>
+    <div class="acoes"><a class="btn" th:href="${conectado == true ? '/painel' : '/login'}" th:text="${conectado == true ? 'Voltar ao painel' : 'Acessar sistema'}"></a><a href="/">Voltar à apresentação</a></div>
+</section></main></body></html>

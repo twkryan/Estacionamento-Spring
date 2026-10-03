@@ -65,7 +65,7 @@ class LandingAcessoTests extends HttpTestSupport {
 
     @Test
     void bootstrapRetornaAoNovoLoginEFechaCadastroPublico() throws Exception {
-        assertThat(pagina("/cadastro", new MockHttpSession()).select("a[href='/login']")).hasSize(1);
+        assertThat(pagina("/cadastro", new MockHttpSession()).select("main a[href='/login']")).hasSize(1);
         mvc.perform(cadastro("admin@example.com", "OPERADOR"))
                 .andExpect(redirectedUrl("/login?cadastro"));
         var login = pagina("/login?cadastro", new MockHttpSession());

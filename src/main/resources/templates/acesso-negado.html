@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head('Acesso negado')}"></head>
-<body><header th:replace="~{fragments :: nav}"></header><main><section class="cartao">
-    <h1>Acesso negado</h1><div th:replace="~{fragments :: mensagens}"></div><a href="/painel">Voltar ao painel</a>
-</section></main></body></html>
+<body class="admin-pagina"><header th:replace="~{fragments :: nav}"></header>
+<main id="conteudo-principal" tabindex="-1">
+    <div class="barra-contexto"><span>Estacionamento / Acesso negado</span><span th:text="${admin ? 'Admin' : 'Operador'}"></span></div>
+    <section class="erro-estado" aria-labelledby="titulo-negado"><p class="sobretitulo">Permissão de acesso</p><span class="erro-codigo" aria-hidden="true">403</span><h1 id="titulo-negado">Acesso negado</h1><div th:replace="~{fragments :: mensagens}"></div><p class="ajuda">Volte à operação ou procure o Admin se precisar de outro papel na equipe.</p><div class="acoes"><a class="btn" href="/painel">Voltar ao painel <span aria-hidden="true">→</span></a></div></section>
+</main></body></html>

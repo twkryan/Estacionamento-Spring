@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head('Editar usuário')}"></head>
-<body><header th:replace="~{fragments :: nav}"></header>
-<main><section class="cartao"><h1>Editar usuário</h1>
-    <div th:replace="~{fragments :: mensagens}"></div>
-    <form method="post" th:action="@{/usuarios/{id}(id=${id})}" th:object="${dados}">
-        <div th:replace="~{fragments :: dadosUsuario}"></div>
-        <label for="senha">Nova senha (opcional)</label><input id="senha" type="password" name="inputSenhaCadastro" minlength="8" maxlength="72" autocomplete="new-password">
-        <p class="ajuda">Deixe em branco para manter a senha atual.</p>
-        <label for="papel">Papel</label><select id="papel" name="papel"><option value="OPERADOR" th:selected="${papel?.name() == 'OPERADOR'}">Operador</option><option value="ADMIN" th:selected="${papel?.name() == 'ADMIN'}">Admin</option></select>
-        <label class="check" for="ativo"><input id="ativo" type="checkbox" name="ativo" value="true" th:checked="${ativo}">Acesso ativo</label>
-        <div class="acoes"><button type="submit">Salvar usuário</button><a href="/usuarios">Voltar aos usuários</a></div>
-    </form>
-</section></main></body></html>
+<body class="admin-pagina"><header th:replace="~{fragments :: nav}"></header>
+<main id="conteudo-principal" tabindex="-1">
+    <div class="barra-contexto"><span>Estacionamento / Usuários / Edição</span><span>Admin</span></div>
+    <header class="cabecalho-pagina"><div><p class="sobretitulo">Administração</p><h1>Editar usuário</h1><p class="ajuda">Atualize os dados, o papel e o acesso da pessoa.</p></div></header>
+    <div class="admin-form-layout">
+        <section class="cartao" aria-labelledby="titulo-dados">
+            <h2 id="titulo-dados">Dados da conta</h2><div th:replace="~{fragments :: mensagens}"></div>
+            <form method="post" th:action="@{/usuarios/{id}(id=${id})}" th:object="${dados}">
+                <div th:replace="~{fragments :: dadosUsuario}"></div>
+                <label for="senha">Nova senha (opcional)</label><input id="senha" type="password" name="inputSenhaCadastro" minlength="8" maxlength="72" autocomplete="new-password" aria-describedby="senha-ajuda">
+                <p class="ajuda" id="senha-ajuda">Deixe em branco para manter a senha atual. Para trocar, use pelo menos 8 caracteres.</p>
+                <div class="admin-secao-form"><h2>Permissões e acesso</h2>
+                    <label for="papel">Papel</label><select id="papel" name="papel"><option value="OPERADOR" th:selected="${papel?.name() == 'OPERADOR'}">Operador</option><option value="ADMIN" th:selected="${papel?.name() == 'ADMIN'}">Admin</option></select>
+                    <label class="check" for="ativo"><input id="ativo" type="checkbox" name="ativo" value="true" th:checked="${ativo}" aria-describedby="ativo-ajuda">Acesso ativo</label><p class="ajuda" id="ativo-ajuda">Um usuário inativo não consegue entrar no sistema.</p>
+                </div>
+                <div class="acoes"><button type="submit">Salvar usuário <span aria-hidden="true">→</span></button><a href="/usuarios">Voltar aos usuários</a></div>
+            </form>
+        </section>
+        <aside class="admin-orientacao" aria-labelledby="titulo-acesso"><p class="sobretitulo" id="titulo-acesso">Controle de acesso</p><h2>Admin</h2><p class="ajuda">Gerencia usuários e configurações, além de operar e consultar visitas.</p><h2>Operador</h2><p class="ajuda">Opera entradas e saídas e consulta as movimentações e os relatórios.</p><p class="admin-nota ajuda">Mantenha pelo menos um Admin ativo. Uma conta legada precisa de papel definido e nova senha para acessar o sistema.</p></aside>
+    </div>
+</main></body></html>

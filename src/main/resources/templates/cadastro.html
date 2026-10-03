@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head('Cadastro')}"></head>
-<body><th:block th:if="${conectado}"><header th:replace="~{fragments :: nav}"></header></th:block>
-<main><section class="cartao">
-    <h1 th:text="${baseNova ? 'Criar conta Admin' : 'Cadastrar usuário'}"></h1>
-    <p th:if="${baseNova}" class="ajuda">A primeira conta administra os usuários e as configurações do estacionamento.</p>
-    <div th:replace="~{fragments :: mensagens}"></div>
-    <form method="post" th:action="@{/efetuarCadastro}" th:object="${dados}">
-        <div th:replace="~{fragments :: dadosUsuario}"></div>
-        <label for="inputSenhaCadastro">Senha (mínimo de 8 caracteres)</label><input type="password" id="inputSenhaCadastro" name="inputSenhaCadastro" required minlength="8" maxlength="72" autocomplete="new-password">
-        <div th:unless="${baseNova}"><label for="papel">Papel</label><select id="papel" name="papel"><option value="OPERADOR">Operador</option><option value="ADMIN">Admin</option></select></div>
-        <div class="acoes"><button type="submit">Cadastrar</button><a th:href="${conectado ? '/usuarios' : '/login'}">Voltar</a></div>
-    </form>
-</section></main></body></html>
+<body class="admin-pagina" th:classappend="${!conectado ? 'admin-publico' : ''}">
+<th:block th:if="${conectado}"><header th:replace="~{fragments :: nav}"></header></th:block>
+<header th:unless="${conectado}" class="admin-marca-publica"><a class="marca" href="/"><span class="marca-simbolo" aria-hidden="true">P</span>Estacionamento</a><a href="/login">Voltar ao login</a></header>
+<main id="conteudo-principal" tabindex="-1">
+    <div th:if="${conectado}" class="barra-contexto"><span>Estacionamento / Usuários / Cadastro</span><span>Admin</span></div>
+    <header class="cabecalho-pagina"><div><p class="sobretitulo" th:text="${baseNova ? 'Primeiro acesso' : 'Administração'}"></p><h1 th:text="${baseNova ? 'Criar conta Admin' : 'Cadastrar usuário'}"></h1><p class="ajuda" th:text="${baseNova ? 'Comece pelo acesso de quem vai administrar o estacionamento.' : 'Adicione uma pessoa e defina seu papel na equipe.'}"></p></div></header>
+    <div class="admin-form-layout">
+        <section class="cartao" aria-labelledby="titulo-dados">
+            <h2 id="titulo-dados">Dados da conta</h2><p class="ajuda">Todos os campos são obrigatórios.</p>
+            <div th:replace="~{fragments :: mensagens}"></div>
+            <form method="post" th:action="@{/efetuarCadastro}" th:object="${dados}">
+                <div th:replace="~{fragments :: dadosUsuario}"></div>
+                <label for="inputSenhaCadastro">Senha (mínimo de 8 caracteres)</label><input type="password" id="inputSenhaCadastro" name="inputSenhaCadastro" required minlength="8" maxlength="72" autocomplete="new-password" aria-describedby="senha-ajuda">
+                <p class="ajuda" id="senha-ajuda">Use pelo menos 8 caracteres. A senha não será exibida após o cadastro.</p>
+                <div th:unless="${baseNova}"><label for="papel">Papel</label><select id="papel" name="papel"><option value="OPERADOR" th:selected="${param.papel == null or param.papel[0] == 'OPERADOR'}">Operador</option><option value="ADMIN" th:selected="${param.papel != null and param.papel[0] == 'ADMIN'}">Admin</option></select></div>
+                <div class="acoes"><button type="submit">Cadastrar <span aria-hidden="true">→</span></button><a th:href="${conectado ? '/usuarios' : '/login'}" th:text="${conectado ? 'Voltar aos usuários' : 'Voltar ao login'}"></a></div>
+            </form>
+        </section>
+        <aside class="admin-orientacao" aria-labelledby="titulo-papel">
+            <p class="sobretitulo" id="titulo-papel" th:text="${baseNova ? 'Sua primeira conta' : 'Papéis da equipe'}"></p>
+            <h2>Admin</h2><p class="ajuda">Gerencia usuários, capacidade e configurações. Também opera e consulta as visitas.</p>
+            <th:block th:unless="${baseNova}"><h2>Operador</h2><p class="ajuda">Registra entradas e saídas e consulta painel, movimentações e relatórios.</p></th:block>
+            <p class="admin-nota ajuda" th:if="${baseNova}">Depois de criar a conta, entre com seu email e senha. Os próximos usuários serão cadastrados pelo Admin.</p>
+        </aside>
+    </div>
+</main></body></html>
