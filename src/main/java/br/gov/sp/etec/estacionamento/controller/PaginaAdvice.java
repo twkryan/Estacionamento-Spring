@@ -21,6 +21,9 @@ public class PaginaAdvice {
         model.addAttribute("conectado", conectado);
         model.addAttribute("admin", conectado && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
         model.addAttribute("emailAtual", conectado ? auth.getName() : "");
+        // A apresentação de erro não pode depender do serviço que pode ter causado a falha.
+        if (request.getDispatcherType() == jakarta.servlet.DispatcherType.ERROR
+                || request.getRequestURI().equals(request.getContextPath() + "/error")) return;
         model.addAttribute("notificacoes", configuracoes.obter().notificacoes());
     }
 }

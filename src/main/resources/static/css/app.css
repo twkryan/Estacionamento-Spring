@@ -154,6 +154,48 @@ time { white-space: nowrap; font-family: var(--mono); font-size: 11px; }
     .consultas .consulta-indicadores > div:nth-child(2n) { border-right: 0; padding-right: 0; }
     .consultas .consulta-indicadores span:first-child { min-height: 36px; }
 }
+/* Administração e estados de erro: usam os tokens da operação sem alterar seu shell. */
+.admin-pagina .admin-form-layout { display: grid; grid-template-columns: minmax(0, 2fr) minmax(200px, 1fr); gap: 48px; align-items: start; }
+.admin-pagina .admin-orientacao { padding-top: 24px; }
+.admin-pagina .admin-orientacao h2 { margin-top: 28px; }
+.admin-pagina .admin-orientacao p { max-width: 38ch; }
+.admin-pagina .admin-nota { padding-top: 24px; margin-top: 28px; border-top: 1px solid var(--borda); }
+.admin-pagina .admin-secao-form { margin-top: 32px; padding-top: 28px; border-top: 1px solid var(--borda); }
+.admin-pagina .check input { flex: 0 0 18px; margin: 0; }
+.admin-pagina .admin-papel { display: inline-block; padding: 6px 8px; border: 1px solid var(--borda); border-radius: 5px; color: var(--secundario); font: 10px var(--mono); white-space: nowrap; }
+.admin-pagina .admin-estado { white-space: nowrap; }
+.admin-pagina .admin-estado::before { content: ''; display: inline-block; width: 6px; height: 6px; margin-right: 8px; border-radius: 50%; background: #83b894; }
+.admin-pagina .admin-inativo { color: var(--secundario); }
+.admin-pagina .admin-inativo::before { background: var(--secundario); }
+.admin-pagina .tabela-usuarios { margin-top: 20px; }
+.admin-pagina .tabela-usuarios table { min-width: 760px; }
+.admin-pagina .admin-config-secao { display: grid; grid-template-columns: minmax(200px, 1fr) minmax(0, 2fr); gap: 48px; margin-top: 36px; padding: 36px 0 0; border-top: 1px solid var(--borda); align-items: start; }
+.admin-pagina .admin-config-secao .cartao > label:first-child { margin-top: 0; }
+.admin-pagina .admin-ocupacao { margin-top: 28px; }
+.admin-pagina .admin-ocupacao strong { display: block; font-size: 44px; font-weight: 400; letter-spacing: -1.5px; }
+.admin-pagina .admin-ocupacao span { color: var(--secundario); font-size: 12px; }
+.admin-pagina .admin-opcao + .admin-opcao { border-top: 1px solid var(--borda); padding-top: 16px; margin-top: 24px; }
+.admin-pagina .admin-opcao .check { margin-top: 0; font-size: 14px; }
+.admin-pagina .admin-opcao .ajuda { margin-left: 28px; }
+.admin-marca-publica { display: flex; align-items: center; justify-content: space-between; gap: 24px; max-width: 1240px; margin: auto; padding: 28px 36px; border-bottom: 1px solid var(--borda); }
+.admin-marca-publica > a:last-child { font-size: 12px; color: var(--secundario); padding: 12px 0; }
+.admin-publico main { margin-top: 48px; }
+.erro-pagina .erro-estado, .admin-pagina .erro-estado { max-width: 640px; padding: 48px 0; }
+.erro-pagina .erro-codigo, .admin-pagina .erro-codigo { display: block; font: 64px var(--mono); color: var(--secundario); margin-bottom: 36px; letter-spacing: -4px; }
+.erro-pagina .erro-estado .ajuda, .admin-pagina .erro-estado .ajuda { max-width: 52ch; font-size: 14px; }
+@media (max-width: 1000px) {
+    .admin-pagina .admin-form-layout, .admin-pagina .admin-config-secao { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    .admin-pagina .admin-orientacao { padding-top: 0; }
+}
+@media (max-width: 760px) {
+    .admin-marca-publica { padding: 20px 16px; flex-wrap: wrap; gap: 8px 24px; }
+    .admin-publico main { margin-top: 32px; }
+    .admin-pagina .admin-config-secao { margin-top: 28px; padding-top: 28px; }
+    .admin-pagina .admin-form-layout .acoes, .admin-pagina .admin-config-secao .acoes { gap: 12px; }
+    .admin-pagina .admin-form-layout .acoes button, .admin-pagina .admin-config-secao .acoes button { width: 100%; }
+    .erro-pagina .erro-estado, .admin-pagina .erro-estado { padding: 24px 0; }
+    .erro-pagina .erro-estado .acoes, .admin-pagina .erro-estado .acoes { align-items: stretch; flex-direction: column; gap: 12px; }
+}
 @media (max-width: 1000px) {
     .entrada-layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
     .resumo-entrada { padding: 0; }

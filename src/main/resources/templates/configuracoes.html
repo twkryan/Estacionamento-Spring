@@ -1,29 +1,30 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head('Configurações')}"></head>
-<body><header th:replace="~{fragments :: nav}"></header>
-<main><section class="cartao" aria-labelledby="titulo-configuracoes">
-    <h1 id="titulo-configuracoes">Configurações</h1>
+<body class="admin-pagina"><header th:replace="~{fragments :: nav}"></header>
+<main id="conteudo-principal" tabindex="-1">
+    <div class="barra-contexto"><span>Estacionamento / Configurações</span><span>Admin</span></div>
+    <header class="cabecalho-pagina"><div><p class="sobretitulo">Administração</p><h1 id="titulo-configuracoes">Configurações</h1><p class="ajuda">Ajuste a capacidade e os recursos do estacionamento.</p></div></header>
     <div th:replace="~{fragments :: mensagens}"></div>
-    <p class="ajuda">A capacidade não pode ficar abaixo da ocupação atual (<span th:text="${indicadores.ocupacao}"></span> entradas abertas).</p>
-    <form method="post" th:action="@{/configuracoes}">
-        <label for="capacidade">Capacidade do estacionamento</label>
-        <input id="capacidade" name="capacidade" type="number" min="1" step="1" required th:value="${valorCapacidade}">
-        <div class="acoes"><button type="submit">Salvar capacidade</button></div>
-    </form>
-    <form method="post" th:action="@{/configuracoes/opcoes}" class="opcoes-configuracao">
-        <h2>Opções do sistema</h2>
-        <label class="check"><input id="notificacoes" name="notificacoes" type="checkbox" value="true" th:checked="${configuracao.notificacoes}"> Notificações visuais de confirmação</label>
-        <label class="check"><input id="backup" name="backup" type="checkbox" value="true" th:checked="${configuracao.backup}"> Habilitar backup manual</label>
-        <label class="check"><input id="exportacao" name="exportacao" type="checkbox" value="true" th:checked="${configuracao.exportacao}"> Habilitar exportação de dados</label>
-        <div class="acoes"><button type="submit">Salvar opções</button></div>
-    </form>
-    <section class="opcoes-configuracao" aria-labelledby="titulo-backup">
-        <h2 id="titulo-backup">Backup local</h2>
-        <p class="ajuda">O arquivo SQL inclui os dados e as configurações atuais.</p>
-        <div class="acoes">
-            <a class="btn" th:if="${configuracao.backup}" href="/configuracoes/backup">Baixar backup SQL</a>
-            <span class="ajuda" th:unless="${configuracao.backup}">Backup manual desabilitado.</span>
-        </div>
+    <section class="admin-config-secao" aria-labelledby="titulo-capacidade">
+        <div><p class="sobretitulo">01 / Pátio</p><h2 id="titulo-capacidade">Capacidade</h2><p class="ajuda">Defina o limite de entradas abertas ao mesmo tempo.</p><p class="admin-ocupacao"><strong th:text="${indicadores.ocupacao}"></strong><span>entradas abertas agora</span></p></div>
+        <form class="cartao" method="post" th:action="@{/configuracoes}">
+            <label for="capacidade">Capacidade do estacionamento</label><input id="capacidade" name="capacidade" type="number" min="1" step="1" required th:value="${valorCapacidade}" aria-describedby="capacidade-ajuda">
+            <p class="ajuda" id="capacidade-ajuda">Use um número inteiro maior que zero. A capacidade não pode ficar abaixo da ocupação atual (<span th:text="${indicadores.ocupacao}"></span> entradas abertas).</p>
+            <div class="acoes"><button type="submit">Salvar capacidade</button></div>
+        </form>
     </section>
-</section></main></body></html>
+    <section class="admin-config-secao" aria-labelledby="titulo-opcoes">
+        <div><p class="sobretitulo">02 / Recursos</p><h2 id="titulo-opcoes">Opções do sistema</h2><p class="ajuda">Escolha os recursos disponíveis para a equipe.</p></div>
+        <form class="cartao" method="post" th:action="@{/configuracoes/opcoes}">
+            <div class="admin-opcao"><label class="check" for="notificacoes"><input id="notificacoes" name="notificacoes" type="checkbox" value="true" th:checked="${configuracao.notificacoes}" aria-describedby="notificacoes-ajuda">Notificações visuais de confirmação</label><p class="ajuda" id="notificacoes-ajuda">Exibe mensagens de sucesso. Os erros continuam visíveis mesmo com esta opção desligada.</p></div>
+            <div class="admin-opcao"><label class="check" for="backup"><input id="backup" name="backup" type="checkbox" value="true" th:checked="${configuracao.backup}" aria-describedby="backup-ajuda">Habilitar backup manual</label><p class="ajuda" id="backup-ajuda">Permite ao Admin baixar uma cópia SQL dos dados.</p></div>
+            <div class="admin-opcao"><label class="check" for="exportacao"><input id="exportacao" name="exportacao" type="checkbox" value="true" th:checked="${configuracao.exportacao}" aria-describedby="exportacao-ajuda">Habilitar exportação de dados</label><p class="ajuda" id="exportacao-ajuda">Disponibiliza a exportação dos relatórios para a equipe.</p></div>
+            <div class="acoes"><button type="submit">Salvar opções</button></div>
+        </form>
+    </section>
+    <section class="admin-config-secao" aria-labelledby="titulo-backup">
+        <div><p class="sobretitulo">03 / Cópia local</p><h2 id="titulo-backup">Backup local</h2><p class="ajuda">Download manual, disponível para Admin.</p></div>
+        <div class="cartao"><span class="admin-papel" th:text="${configuracao.backup ? 'Habilitado' : 'Desabilitado'}"></span><p class="ajuda">O arquivo SQL inclui os dados e as configurações atuais. Guarde-o em um local protegido.</p><div class="acoes"><a class="btn secundario" th:if="${configuracao.backup}" href="/configuracoes/backup">Baixar backup SQL <span aria-hidden="true">↓</span></a><span class="ajuda" th:unless="${configuracao.backup}">Backup manual desabilitado. Habilite a opção acima e salve para baixar o arquivo.</span></div></div>
+    </section>
+</main></body></html>
