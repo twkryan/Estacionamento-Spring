@@ -1,99 +1,109 @@
-# Estacionamento Spring
+<div align="center">
 
-Aplicação local de estacionamento com Spring Boot, Thymeleaf, Spring Data JPA e banco H2. O MVP aprovado inclui acesso por Admin e Operador, entradas e saídas, controle de vagas, movimentações, relatórios, configurações e downloads locais. O andamento da implementação e da validação fica nas [issues do MVP](https://github.com/twkryan/Estacionamento-Spring/issues/1).
+  <h1>🅿️ Estacionamento Spring</h1>
 
-## Prévia — direção A
+  <p><strong>Cada entrada. Cada saída. Tudo sob controle.</strong></p>
+  <p>Controle de vagas, visitas e histórico em uma aplicação web simples de operar.</p>
 
-![Landing](docs/prototipos/A-landing-desktop.jpg)
+  <p>
+    <img src="https://img.shields.io/badge/Java-25-E76F00?style=flat-square" alt="Java 25">
+    <img src="https://img.shields.io/badge/Spring_Boot-4.1.0-6DB33F?style=flat-square&amp;logo=springboot&amp;logoColor=white" alt="Spring Boot 4.1.0">
+    <img src="https://img.shields.io/badge/Thymeleaf-005F0F?style=flat-square&amp;logo=thymeleaf&amp;logoColor=white" alt="Thymeleaf">
+    <img src="https://img.shields.io/badge/H2-1E54B7?style=flat-square" alt="H2">
+  </p>
 
-![Painel](docs/prototipos/A-painel-desktop.jpg)
+  <p>
+    <a href="https://estacionamento-spring-bn9p.onrender.com">
+      <img src="https://img.shields.io/badge/Acessar_o_projeto-0066FF?style=for-the-badge&amp;logo=render&amp;logoColor=white" alt="Acessar a demonstração online no Render">
+    </a>
+  </p>
+  <p><sub>Demonstração hospedada no Render. O primeiro acesso pode demorar enquanto o serviço inicia; os dados são temporários.</sub></p>
 
-![Login](docs/prototipos/A-login-desktop.jpg)
+  <p>
+    <a href="#sobre">Sobre</a> ·
+    <a href="#funcionalidades">Funcionalidades</a> ·
+    <a href="#interface">Interface</a> ·
+    <a href="#tecnologias">Tecnologias</a>
+  </p>
 
-![Entrada](docs/prototipos/A-entrada-desktop.jpg)
+</div>
 
-![Configurações](docs/prototipos/A-configuracoes-desktop.jpg)
+---
 
-## Requisitos
+<a id="sobre"></a>
 
-- JDK 25, conforme definido no `pom.xml`.
-- `JAVA_HOME` apontando para o JDK e Java disponível no `PATH`.
-- Internet no primeiro uso para baixar o Maven e as dependências.
+## 🚗 Sobre o projeto
 
-O Maven Wrapper está incluído no projeto; não é necessário instalar Maven separadamente.
+O **Estacionamento Spring** organiza o dia a dia de um estacionamento: da chegada do veículo à consulta de suas visitas anteriores. O painel reúne entradas abertas, ocupação atual e vagas disponíveis, enquanto o histórico preserva os horários de entrada e saída.
 
-## Executar no Windows
+A interface é responsiva e oferece dois perfis de acesso: o **Operador** registra entradas e saídas e consulta os dados; o **Admin** também gerencia usuários, capacidade e configurações. O foco do projeto é o controle das visitas, sem cobrança de tarifas.
 
-Abra o PowerShell na pasta do projeto:
+<a id="funcionalidades"></a>
 
-```powershell
-.\mvnw.cmd spring-boot:run
-```
+## ✨ Funcionalidades
 
-Acesse <http://localhost:8080> para conhecer o produto e clique em **Acessar sistema** para abrir <http://localhost:8080/login>. Para encerrar, pressione `Ctrl+C` no terminal.
+| Recurso | O que oferece |
+| --- | --- |
+| **Painel** | Capacidade, ocupação, vagas disponíveis e entradas abertas. |
+| **Entradas e saídas** | Registro dos veículos e encerramento das visitas com histórico preservado. |
+| **Movimentações** | Consulta de visitas por placa e período de entrada. |
+| **Relatórios** | Total de visitas, média de permanência e exportação em CSV. |
+| **Usuários** | Contas com papéis de Admin e Operador e controle de acesso. |
+| **Configurações** | Capacidade do pátio, notificações, exportação e backup SQL manual. |
 
-A aplicação escuta somente no computador local. Se a porta 8080 já estiver em uso, escolha uma porta livre sem encerrar a outra aplicação:
+<a id="interface"></a>
 
-```powershell
-.\mvnw.cmd spring-boot:run '-Dspring-boot.run.arguments=--server.port=8982'
-```
+## 🖥️ Conheça a interface
 
-Para uma demonstração com banco próprio, sem usar o banco padrão:
+![Painel do estacionamento com capacidade, ocupação, vagas disponíveis e entradas abertas](docs/images/painel.jpg)
 
-```powershell
-.\mvnw.cmd spring-boot:run '-Dspring-boot.run.arguments=--server.port=8982 --spring.datasource.url=jdbc:h2:file:./database/demo'
-```
+<p align="center"><sub>Capturas da aplicação com dados fictícios de demonstração.</sub></p>
 
-Nesse caso, acesse <http://localhost:8982>. Reiniciar com o mesmo caminho de banco preserva os usuários, as visitas e as configurações.
+<details>
+<summary><strong>Ver mais telas</strong></summary>
 
-## Primeiro acesso e papéis
+<br>
 
-Em uma base nova, abra **Criar conta Admin** em `/login` e preencha os dados solicitados. O primeiro cadastro cria o Admin; cadastros posteriores exigem uma sessão de Admin. Entre usando o e-mail e a senha cadastrados.
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <strong>Login</strong><br><br>
+      <img src="docs/images/login.jpg" alt="Login por email e senha" width="100%">
+    </td>
+    <td width="50%" align="center">
+      <strong>Registro de entrada</strong><br><br>
+      <img src="docs/images/entrada.jpg" alt="Registro de placa, modelo, cor e observação" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <strong>Relatórios</strong><br><br>
+      <img src="docs/images/relatorios.jpg" alt="Relatórios com filtros, indicadores e exportação CSV" width="100%">
+    </td>
+    <td width="50%" align="center">
+      <strong>Configurações</strong><br><br>
+      <img src="docs/images/configuracoes.jpg" alt="Configurações de capacidade e recursos do sistema" width="100%">
+    </td>
+  </tr>
+</table>
 
-O Admin gerencia usuários e configurações e também opera e consulta. O Operador registra entradas e saídas e consulta o painel, as movimentações e os relatórios. A gestão permite editar dados e papéis ou desativar contas, preservando pelo menos um Admin ativo. Use **Sair** para encerrar a sessão.
+</details>
 
-Para dados de uma versão anterior, consulte [credenciais legadas](docs/credenciais-legadas.md). A aplicação não promove usuários antigos nem converte senhas em texto automaticamente; a demonstração pode usar uma base nova separada.
+<details>
+<summary><strong>Ver página de apresentação</strong></summary>
 
-## Roteiro da demonstração do MVP
+![Página de apresentação do Estacionamento Spring](docs/images/apresentacao.jpg)
 
-1. Crie o primeiro Admin e, em **Usuários**, cadastre um Operador.
-2. Em **Configurações**, defina uma capacidade pequena para demonstrar a lotação; a capacidade não pode ficar abaixo da ocupação atual.
-3. Registre entradas e confira capacidade, ocupação e vagas no painel. Tente repetir uma placa com diferenças de caixa, espaço ou hífen e tente uma entrada quando não houver vagas.
-4. Registre a saída de uma visita. Confira a liberação da vaga, a permanência e o histórico; uma nova visita da mesma placa deve ser possível.
-5. Consulte movimentações e relatórios por placa e período de entrada. O total conta visitas; a média considera somente as encerradas; a ocupação permanece atual, independente do filtro.
-6. Confira notificações, CSV e backup nos botões próprios. Desabilite os recursos nas configurações e verifique que suas ações também ficam bloqueadas. Erros de validação continuam visíveis mesmo sem notificações de sucesso.
-7. Entre como Operador e confira operação e consultas, incluindo CSV quando habilitado. Usuários, configurações e backup exigem Admin.
-8. Reinicie usando o mesmo banco e confira dados, configurações e histórico. Confira também as páginas em uma tela de celular e em uma base vazia.
+</details>
 
-O backup é manual e baixa uma exportação SQL compatível com H2, com dados e configurações. A restauração não faz parte da interface. O CSV contém o conjunto filtrado e seu resumo; a exportação não é uma cobrança.
+<a id="tecnologias"></a>
 
-## Testes e compilação
+## 🛠️ Tecnologias
 
-```powershell
-.\mvnw.cmd verify
-```
+Desenvolvido com **Java 25** e **Spring Boot 4.1.0**, usando **Spring MVC** e **Thymeleaf** para as páginas, **Spring Data JPA / Hibernate** para persistência e **H2** como banco de dados. A autenticação e as permissões são gerenciadas pelo **Spring Security**.
 
-`verify` executa a suíte de testes e gera o pacote. Os testes usam H2 isolado do banco local. O pacote gerado pode ser executado sem Maven:
+---
 
-```powershell
-java -jar .\target\estacionamento-0.0.1-SNAPSHOT.jar
-```
-
-## Estrutura
-
-- `src/main/java`: aplicação, controllers, entidades, modelos, repositórios e serviços.
-- `src/main/resources/templates`: páginas Thymeleaf.
-- `src/main/resources/application.properties`: configuração da aplicação e do banco.
-- `src/test/java`: testes existentes.
-- `database`: arquivos locais do H2, ignorados pelo Git.
-- `.mvn`, `mvnw` e `mvnw.cmd`: Maven Wrapper.
-
-O banco está configurado em `./database/appdb`. Os dados ficam no computador e não são enviados ao GitHub. Uma cópia nova do repositório começa sem os dados locais.
-
-## GitHub
-
-Repositório: <https://github.com/twkryan/Estacionamento-Spring>.
-
-Escopo aprovado: [especificação do MVP](docs/especificacao-mvp.md). Coordenação e contratos: [orquestração](docs/ORQUESTRACAO-MVP.md). As entregas permanecem em PRs separados até a revisão da integração.
-
-Resultado da demonstração: [validação do MVP](docs/validacao-mvp.md), com 59 testes aprovados no `verify` pós-review de 02/10/2026 e conferência do menu de consultas para Admin e Operador em computador e celular. O registro preserva os 57 testes da validação original em seu snapshot histórico.
+<div align="center">
+  <sub>Estacionamento Spring · Da chegada ao histórico.</sub>
+</div>
