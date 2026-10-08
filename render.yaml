@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: estacionamento-spring
+    runtime: docker
+    plan: free
+    region: virginia
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /
+    autoDeploy: true
