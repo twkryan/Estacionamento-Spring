@@ -31,12 +31,16 @@
             </table>
         </div>
     </section>
-    <section id="como-funciona" class="como-funciona" aria-labelledby="titulo-fluxo">
+    <section id="como-funciona" class="como-funciona" aria-labelledby="titulo-fluxo"
+             data-demo-state="idle" data-demo-motion="instant">
         <p class="sobretitulo">UMA VISITA, DO INÍCIO AO FIM</p><h2 id="titulo-fluxo">O fluxo é simples.<br>O registro fica completo.</h2>
-        <ol class="fluxo"><li><span class="etapa" aria-hidden="true">01</span><h3>Registre a entrada</h3><p>Placa, modelo, cor e uma observação, se necessário.</p></li><li><span class="etapa" aria-hidden="true">02</span><h3>Acompanhe a permanência</h3><p>Entradas abertas e vagas disponíveis em um só lugar.</p></li><li><span class="etapa" aria-hidden="true">03</span><h3>Confirme a saída</h3><p>A vaga é liberada. A visita permanece no histórico.</p></li></ol>
+        <p id="explicacao-fluxo" class="fluxo-explicacao">Exemplo fictício: Enquanto a entrada de ABC1D23 está aberta, a visita ocupa uma vaga. Ao registrar a saída, a vaga é liberada e a visita permanece no histórico.</p>
+        <button id="controle-exemplo" class="botao primario controle-exemplo" type="button" aria-describedby="explicacao-fluxo" hidden>Ver exemplo</button>
+        <ol class="fluxo"><li data-demo-step="entrada" data-demo-highlighted="false"><span class="etapa" aria-hidden="true">01</span><h3>Registre a entrada</h3><p>Placa, modelo, cor e uma observação, se necessário.</p></li><li data-demo-step="permanencia" data-demo-highlighted="false"><span class="etapa" aria-hidden="true">02</span><h3>Acompanhe a permanência</h3><p>Entradas abertas e vagas disponíveis em um só lugar.</p></li><li data-demo-step="saida" data-demo-highlighted="false"><span class="etapa" aria-hidden="true">03</span><h3>Confirme a saída</h3><p>A vaga é liberada. A visita permanece no histórico.</p></li></ol>
     </section>
     <section class="papeis" aria-labelledby="titulo-papeis"><h2 id="titulo-papeis">A operação e a gestão,<br>com os acessos certos.</h2><div><h3>Operador</h3><p>Registra entradas e saídas. Consulta movimentações e relatórios.</p></div><div><h3>Admin</h3><p>Também gerencia usuários, capacidade, opções e backup manual.</p></div></section>
 </main>
 <footer class="rodape-publico"><span>Estacionamento</span><p>Entradas, saídas e histórico. Sem cobrança de tarifas.</p></footer>
+<script src="/js/fluxo-ilustrado.js" defer></script>
 </body>
 </html>

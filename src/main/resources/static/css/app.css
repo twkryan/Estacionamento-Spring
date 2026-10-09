@@ -77,6 +77,7 @@ time { white-space: nowrap; font-family: var(--mono); font-size: 11px; }
 .tabela .btn, .tabela button { min-height: 40px; padding: 8px 12px; border-radius: 8px; font-size: 11px; white-space: nowrap; }
 .mensagem { padding: 14px 18px; border: 1px solid #395a40; background: #122318; color: #c8f2d5; border-radius: 8px; }
 .erro { background: #2d1316; border-color: #82424b; color: #ffd8de; }
+.feedback-envio-status:not([hidden]) { color: var(--secundario); }
 :focus-visible { outline: 3px solid #6faeff; outline-offset: 3px; }
 .barra-contexto { display: flex; justify-content: space-between; gap: 16px; margin: -32px -36px 40px; padding: 24px 36px; border-bottom: 1px solid var(--borda); color: var(--secundario); font-size: 11px; }
 .barra-contexto span { overflow-wrap: anywhere; }

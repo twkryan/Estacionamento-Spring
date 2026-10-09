@@ -50,6 +50,27 @@ class LandingAcessoTests extends HttpTestSupport {
     }
 
     @Test
+    void fluxoIlustradoMantemExplicacaoEControleOcultoSemJavaScript() throws Exception {
+        var pagina = pagina("/", new MockHttpSession());
+
+        assertThat(pagina.select("#explicacao-fluxo").text()).isEqualTo(
+                "Exemplo fictício: Enquanto a entrada de ABC1D23 está aberta, a visita ocupa uma vaga. "
+                        + "Ao registrar a saída, a vaga é liberada e a visita permanece no histórico.");
+        assertThat(pagina.select("#controle-exemplo[hidden]").text()).isEqualTo("Ver exemplo");
+        assertThat(pagina.select("#como-funciona ol.fluxo > li")).hasSize(3);
+    }
+
+    @Test
+    void scriptDaDemonstracaoECarregadoComoRecursoPublico() throws Exception {
+        var pagina = pagina("/", new MockHttpSession());
+
+        assertThat(pagina.select("script[src='/js/fluxo-ilustrado.js'][defer]")).hasSize(1);
+        var script = mvc.perform(get("/js/fluxo-ilustrado.js")).andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8);
+        assertThat(script).isNotBlank();
+    }
+
+    @Test
     void loginPublicoMantemFormularioRealCsrfEPrimeiroCadastro() throws Exception {
         var pagina = pagina("/login", new MockHttpSession());
 

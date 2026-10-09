@@ -32,9 +32,10 @@
                     <td th:text="${entrada.cor}"></td>
                     <td><time th:datetime="${entrada.horaEntrada}" th:text="${#temporals.format(entrada.horaEntrada, 'dd/MM/yyyy HH:mm:ss')}"></time></td>
                     <td>
-                        <form method="post" th:action="@{/veiculo/registrar-saida}">
+                        <form method="post" th:action="@{/veiculo/registrar-saida}" data-feedback-envio>
                             <input type="hidden" name="id" th:value="${entrada.id}">
                             <button class="confirmar-saida" type="submit" th:attr="aria-label=${'Confirmar saída de ' + entrada.placa + ', entrada em ' + #temporals.format(entrada.horaEntrada, 'dd/MM/yyyy HH:mm:ss')}">Confirmar saída</button>
+                            <span class="feedback-envio-status" data-feedback-envio-status role="status" hidden></span>
                         </form>
                     </td>
                 </tr>
@@ -62,5 +63,6 @@
         </div>
     </section>
 </main>
+<script th:src="@{/js/feedback-envio.js}" defer></script>
 </body>
 </html>

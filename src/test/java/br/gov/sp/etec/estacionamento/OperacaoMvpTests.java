@@ -20,6 +20,22 @@ class OperacaoMvpTests extends HttpTestSupport {
     void autenticarAdmin() throws Exception { iniciarAdmin(); }
 
     @Test
+    void formularioDeEntradaMantemPostCsrfEStatusNeutroAntesDoEnvio() throws Exception {
+        var page = pagina("/veiculo/registrar-entrada", admin);
+        var form = page.selectFirst("form[data-feedback-envio]");
+
+        assertThat(form).isNotNull();
+        assertThat(form.attr("method")).isEqualTo("post");
+        assertThat(form.attr("action")).isEqualTo("/veiculo/cadastrar");
+        assertThat(form.selectFirst("input[name=_csrf]")).isNotNull();
+        var status = form.selectFirst("[data-feedback-envio-status][role=status][hidden]");
+        assertThat(status).isNotNull();
+        assertThat(status.text()).isEmpty();
+        assertThat(form.selectFirst("button[type=submit]").hasAttr("disabled")).isFalse();
+        assertThat(page.select("script[src='/js/feedback-envio.js']")).hasSize(1);
+    }
+
+    @Test
     void painelMostraCapacidadeOcupacaoVagasEEstadoVazio() throws Exception {
         var page = pagina("/painel", admin);
 
@@ -88,6 +104,9 @@ class OperacaoMvpTests extends HttpTestSupport {
 
         assertThat(formulario.selectFirst(".erro").text()).contains("Preencha placa, modelo e cor");
         assertThat(formulario.selectFirst("#placa").val()).isEqualTo("  ");
+        var status = formulario.selectFirst("form[data-feedback-envio] [data-feedback-envio-status][role=status][hidden]");
+        assertThat(status).isNotNull();
+        assertThat(status.text()).isEmpty();
         assertThat(pagina("/painel", admin).select("#painel-entradas tbody tr")).isEmpty();
     }
 
