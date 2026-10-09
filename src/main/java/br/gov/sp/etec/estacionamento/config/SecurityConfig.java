@@ -35,7 +35,7 @@ public class SecurityConfig {
     SecurityFilterChain filtro(HttpSecurity http, UsuarioRepository usuarios) throws Exception {
         http.addFilterBefore(new SessaoAtualFilter(usuarios), org.springframework.security.web.access.intercept.AuthorizationFilter.class);
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/cadastro", "/efetuarCadastro", "/css/**", "/error").permitAll()
+                        .requestMatchers("/", "/login", "/cadastro", "/efetuarCadastro", "/css/**", "/js/fluxo-ilustrado.js", "/error").permitAll()
                         .requestMatchers("/usuarios/**", "/configuracoes/**").hasRole("ADMIN")
                         .requestMatchers("/h2-console/**").denyAll()
                         .anyRequest().authenticated())
