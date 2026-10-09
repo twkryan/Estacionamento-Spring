@@ -23,6 +23,27 @@ class SaidaVeiculoTests extends HttpTestSupport {
     void autenticarAdmin() throws Exception { iniciarAdmin(); }
 
     @Test
+    void formulariosDeSaidaMantemPostCsrfEStatusNeutroPorEntradaAberta() throws Exception {
+        registrarEntrada("ENV1A23");
+        registrarEntrada("ENV2B34");
+        var page = paginaDeSaida("");
+        var formularios = page.select("#entradas-abertas form[data-feedback-envio]");
+
+        assertThat(formularios).hasSize(2);
+        formularios.forEach(form -> {
+            assertThat(form.attr("method")).isEqualTo("post");
+            assertThat(form.attr("action")).isEqualTo("/veiculo/registrar-saida");
+            assertThat(form.selectFirst("input[name=id]")).isNotNull();
+            assertThat(form.selectFirst("input[name=_csrf]")).isNotNull();
+            var status = form.selectFirst("[data-feedback-envio-status][role=status][hidden]");
+            assertThat(status).isNotNull();
+            assertThat(status.text()).isEmpty();
+            assertThat(form.selectFirst("button[type=submit]").hasAttr("disabled")).isFalse();
+        });
+        assertThat(page.select("script[src='/js/feedback-envio.js']")).hasSize(1);
+    }
+
+    @Test
     void segundaConfirmacaoNaoAlteraHorarioDaSaida() throws Exception {
         registrarEntrada("REP4D56");
         String id = paginaDeSaida("REP4D56").selectFirst("input[name=id]").val();
