@@ -23,7 +23,11 @@
             const geracaoAtual = ++geracaoEnvio;
 
             window.setTimeout(() => {
-                if (geracaoAtual !== geracaoEnvio || evento.defaultPrevented) return;
+                if (geracaoAtual !== geracaoEnvio) return;
+                if (evento.defaultPrevented) {
+                    limpar();
+                    return;
+                }
 
                 status.textContent = mensagem;
                 status.hidden = false;
