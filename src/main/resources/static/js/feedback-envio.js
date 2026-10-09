@@ -3,32 +3,33 @@
     const statusSelector = '[data-feedback-envio-status]';
     const mensagem = 'Envio iniciado. Aguarde a resposta da página.';
 
-    const limparStatus = () => {
-        document.querySelectorAll(formularioSelector).forEach((formulario) => {
-            const status = formulario.querySelector(statusSelector);
-            if (!status) return;
-
-            status.textContent = '';
-            status.hidden = true;
-        });
-    };
+    const limparStatus = [];
 
     document.querySelectorAll(formularioSelector).forEach((formulario) => {
         const status = formulario.querySelector(statusSelector);
         if (!status) return;
 
+        let geracaoEnvio = 0;
+
+        const limpar = () => {
+            geracaoEnvio += 1;
+            status.textContent = '';
+            status.hidden = true;
+        };
+
+        limparStatus.push(limpar);
+
         formulario.addEventListener('submit', (evento) => {
-            status.textContent = mensagem;
-            status.hidden = false;
+            const geracaoAtual = ++geracaoEnvio;
 
-            Promise.resolve().then(() => {
-                if (!evento.defaultPrevented) return;
+            window.setTimeout(() => {
+                if (geracaoAtual !== geracaoEnvio || evento.defaultPrevented) return;
 
-                status.textContent = '';
-                status.hidden = true;
-            });
+                status.textContent = mensagem;
+                status.hidden = false;
+            }, 0);
         });
     });
 
-    window.addEventListener('pageshow', limparStatus);
+    window.addEventListener('pageshow', () => limparStatus.forEach((limpar) => limpar()));
 })();
